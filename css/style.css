@@ -24,6 +24,37 @@
 
   a { text-decoration: none; color: inherit; }
 
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; /* 로고를 왼쪽 끝으로 배치 */
+  align-items: center;
+  padding: 20px 40px; /* 상하좌우 여백 */
+  z-index: 1000;
+}
+
+.nav-logo {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: var(--white);
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav-logo span {
+  color: var(--red); /* Form 부분에 포인트 컬러 */
+  font-style: italic; /* 디자인 포인트 */
+  margin-left: 2px;
+}
+
+
+
   /* ── HERO ── */
   .hero {
     min-height: 100vh;
@@ -325,13 +356,23 @@
   }
 
   /* ── FOOTER ── */
-  footer {
-    padding: 28px 24px;
-    text-align: center;
-    border-top: 0.5px solid var(--white-08);
-    font-size: 12px;
-    color: var(--white-35);
-  }
+footer {
+  padding: 60px 24px;
+  background: var(--surface); /* 배경을 살짝 다르게 */
+  text-align: center;
+}
+.footer-brand {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--white);
+}
+.footer-info {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--white-35);
+  line-height: 1.6;
+}
 
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
@@ -356,3 +397,14 @@
     .solution-box { padding: 28px 20px; }
     .stats { grid-template-columns: 1fr 1fr; }
   }
+
+
+ /* 모바일 대응 */
+@media (max-width: 768px) {
+  nav {
+    padding: 16px 20px;
+  }
+  .nav-logo {
+    font-size: 18px;
+  }
+}

@@ -12,43 +12,182 @@ const cards = [
 
 let currentCard = null;
 
-/* ── 리드 데이터 저장소 (로컬 + 외부 전송 준비) ── */
-const STORAGE_KEY = 'template_leads';
-
-function getLeads() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
-}
-function saveLead(lead) {
-  const leads = getLeads();
-  leads.push(lead);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
+/* ══════════════════════════════════════════════
+   TODO: DB 연동 시 이 함수 하나만 채우면 됩니다
+   예) Supabase, Google Sheets, Notion 등
+══════════════════════════════════════════════ */
+async function saveLead(payload) {
+  console.log('[리드 수집]', payload);
+  await new Promise(r => setTimeout(r, 700)); // 로딩 효과용 딜레이만 있음
 }
 
-/* ── 폼 유효성 검사 ── */
+/* ══════════════════════════════════════════════
+   CTA 리드 수집 모달 (무료상담받기 / 패키지문의)
+══════════════════════════════════════════════ */
+(function injectCtaModal() {
+  const html = `
+  <div id="cta-modal-bg" style="
+    display:none; position:fixed; inset:0; z-index:300;
+    background:rgba(0,0,0,0.75); backdrop-filter:blur(6px);
+    align-items:center; justify-content:center; padding:24px;
+  " onclick="closeCtaModal(event)">
+    <div style="
+      background:#141414; border:0.5px solid rgba(255,255,255,0.16);
+      border-radius:20px; width:100%; max-width:440px; padding:36px;
+      position:relative; animation:fadeUp 0.25s ease both;
+    ">
+      <button onclick="document.getElementById('cta-modal-bg').style.display='none'" style="
+        position:absolute; top:18px; right:20px;
+        width:32px; height:32px; border-radius:50%;
+        background:#1C1C1C; border:0.5px solid rgba(255,255,255,0.08);
+        color:rgba(245,245,243,0.45); font-size:18px; cursor:pointer;
+        display:flex; align-items:center; justify-content:center;
+        font-family:'Noto Sans KR',sans-serif;
+      ">✕</button>
+
+      <div id="cta-badge" style="margin-bottom:14px;"></div>
+      <h2 id="cta-title" style="font-size:20px;font-weight:900;letter-spacing:-0.025em;line-height:1.3;margin-bottom:8px;color:#F5F5F3;"></h2>
+      <p  id="cta-desc"  style="font-size:13px;color:rgba(245,245,243,0.45);line-height:1.7;margin-bottom:22px;"></p>
+
+      <div style="border-top:0.5px solid rgba(255,255,255,0.08);padding-top:20px;margin-bottom:18px;">
+        <div style="font-size:12px;font-weight:600;color:rgba(245,245,243,0.45);margin-bottom:14px;display:flex;align-items:center;gap:6px;">
+          <span style="display:inline-block;width:4px;height:14px;background:#FF503C;border-radius:2px;"></span>
+          연락처를 남겨주시면 빠르게 연락드릴게요
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          ${['cta-name|이름 *|홍길동|text|30','cta-phone|연락처 *|010-0000-0000|tel|20','cta-email|이메일 (선택)|example@email.com|email|80']
+            .map(s => { const [id,label,ph,type,max] = s.split('|'); return `
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <label style="font-size:12px;font-weight:500;color:rgba(245,245,243,0.45);">${label}</label>
+              <input id="${id}" type="${type}" placeholder="${ph}" maxlength="${max}" style="
+                background:#1C1C1C;border:0.5px solid rgba(255,255,255,0.08);border-radius:10px;
+                padding:11px 14px;color:#F5F5F3;font-family:'Noto Sans KR',sans-serif;
+                font-size:14px;outline:none;width:100%;transition:border-color 0.18s;
+              " onfocus="this.style.borderColor='#FF503C'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+            </div>`; }).join('')}
+        </div>
+        <div id="cta-status" style="font-size:13px;padding:10px 14px;border-radius:10px;margin-top:10px;display:none;"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <button id="cta-submit" onclick="submitCta()" style="
+          flex:1;background:#FF503C;color:#fff;border:none;border-radius:12px;
+          padding:14px 20px;font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:700;
+          cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity 0.15s;
+        " onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+          <span id="cta-btn-text">신청하기</span>
+          <div id="cta-spinner" style="display:none;width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;animation:spin 0.7s linear infinite;"></div>
+        </button>
+        <button onclick="document.getElementById('cta-modal-bg').style.display='none'" style="
+          padding:14px 20px;border-radius:12px;border:0.5px solid rgba(255,255,255,0.16);
+          background:transparent;color:rgba(245,245,243,0.45);font-family:'Noto Sans KR',sans-serif;
+          font-size:14px;cursor:pointer;white-space:nowrap;transition:all 0.15s;
+        " onmouseover="this.style.background='#1C1C1C';this.style.color='#F5F5F3'"
+           onmouseout="this.style.background='transparent';this.style.color='rgba(245,245,243,0.45)'">닫기</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+})();
+
+let ctaType = '';
+
+function openCtaModal(type) {
+  ctaType = type;
+  const isPkg = type === 'package';
+
+  document.getElementById('cta-badge').innerHTML = isPkg
+    ? '<span style="font-size:11px;font-weight:500;padding:4px 10px;border-radius:100px;background:rgba(180,130,255,0.1);color:#B482FF;border:0.5px solid rgba(180,130,255,0.2);">📦 전 업종 패키지</span>'
+    : '<span style="font-size:11px;font-weight:500;padding:4px 10px;border-radius:100px;background:rgba(255,80,60,0.1);color:#FF503C;border:0.5px solid rgba(255,80,60,0.25);">💬 무료 상담</span>';
+
+  document.getElementById('cta-title').textContent = isPkg ? '패키지 문의하기' : '무료 상담 신청';
+  document.getElementById('cta-desc').textContent  = isPkg
+    ? '5개 업종 전체 템플릿 + 카카오·네이버 연동 가이드 + 무제한 클라이언트 라이선스 관련해서 빠르게 안내해 드릴게요.'
+    : '광고비 대비 전환이 안 나오고 있다면, 랜딩 구조부터 같이 봐드릴게요. 무료로 진단해 드립니다.';
+  document.getElementById('cta-btn-text').textContent = isPkg ? '문의 신청' : '상담 신청';
+
+  ['cta-name','cta-phone','cta-email'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+    el.style.borderColor = 'rgba(255,255,255,0.08)';
+  });
+  const st = document.getElementById('cta-status');
+  st.style.display = 'none';
+
+  const btn = document.getElementById('cta-submit');
+  btn.disabled = false;
+  btn.style.background = '#FF503C';
+  btn.style.opacity = '1';
+  document.getElementById('cta-spinner').style.display = 'none';
+  document.getElementById('cta-btn-text').style.display = '';
+
+  document.getElementById('cta-modal-bg').style.display = 'flex';
+}
+
+function closeCtaModal(e) {
+  if (e.target === document.getElementById('cta-modal-bg'))
+    document.getElementById('cta-modal-bg').style.display = 'none';
+}
+
+async function submitCta() {
+  const name  = document.getElementById('cta-name').value.trim();
+  const phone = document.getElementById('cta-phone').value.trim();
+  const email = document.getElementById('cta-email').value.trim();
+
+  if (!name)  { showCtaStatus('이름을 입력해 주세요.', 'error'); document.getElementById('cta-name').style.borderColor='rgba(255,80,60,0.6)'; return; }
+  if (!phone || !/^[0-9\-+\s]{7,20}$/.test(phone)) { showCtaStatus('올바른 연락처를 입력해 주세요.', 'error'); document.getElementById('cta-phone').style.borderColor='rgba(255,80,60,0.6)'; return; }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showCtaStatus('올바른 이메일 주소를 입력해 주세요.', 'error'); document.getElementById('cta-email').style.borderColor='rgba(255,80,60,0.6)'; return; }
+
+  const btn = document.getElementById('cta-submit');
+  btn.disabled = true;
+  document.getElementById('cta-btn-text').style.display = 'none';
+  document.getElementById('cta-spinner').style.display = 'block';
+
+  try {
+    await saveLead({ name, phone, email: email || null, type: ctaType });
+    showCtaStatus('✓ 신청 완료! 빠르게 연락드릴게요.', 'success');
+    btn.innerHTML = '<span>✓ 완료</span>';
+    btn.style.background = '#3DD68C';
+    setTimeout(() => { document.getElementById('cta-modal-bg').style.display = 'none'; }, 1800);
+  } catch {
+    showCtaStatus('오류가 발생했습니다. 다시 시도해 주세요.', 'error');
+    btn.disabled = false;
+    document.getElementById('cta-btn-text').style.display = '';
+    document.getElementById('cta-spinner').style.display = 'none';
+  }
+}
+
+function showCtaStatus(msg, type) {
+  const el = document.getElementById('cta-status');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.background = type === 'success' ? 'rgba(61,214,140,0.08)' : 'rgba(255,80,60,0.08)';
+  el.style.border      = type === 'success' ? '0.5px solid rgba(61,214,140,0.2)' : '0.5px solid rgba(255,80,60,0.25)';
+  el.style.color       = type === 'success' ? '#3DD68C' : '#FF503C';
+}
+
+/* ── Nav / Banner 버튼 인터셉트 ── */
+document.addEventListener('DOMContentLoaded', () => {
+  const navCta = document.querySelector('.nav-cta');
+  if (navCta) navCta.addEventListener('click', e => { e.preventDefault(); openCtaModal('consult'); });
+
+  const bannerBtn = document.querySelector('.btn-banner');
+  if (bannerBtn) bannerBtn.addEventListener('click', e => { e.preventDefault(); openCtaModal('package'); });
+});
+
+/* ══════════════════════════════════════════════
+   템플릿 다운로드 모달 (카드 클릭)
+══════════════════════════════════════════════ */
 function validateForm() {
   const name  = document.getElementById('f-name').value.trim();
   const phone = document.getElementById('f-phone').value.trim();
   const email = document.getElementById('f-email').value.trim();
 
-  document.getElementById('f-name').classList.remove('error');
-  document.getElementById('f-phone').classList.remove('error');
-  document.getElementById('f-email').classList.remove('error');
+  ['f-name','f-phone','f-email'].forEach(id => document.getElementById(id).classList.remove('error'));
 
-  if (!name) {
-    document.getElementById('f-name').classList.add('error');
-    showStatus('이름을 입력해 주세요.', 'error');
-    return null;
-  }
-  if (!phone || !/^[0-9\-+\s]{7,20}$/.test(phone)) {
-    document.getElementById('f-phone').classList.add('error');
-    showStatus('올바른 연락처를 입력해 주세요.', 'error');
-    return null;
-  }
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    document.getElementById('f-email').classList.add('error');
-    showStatus('올바른 이메일 주소를 입력해 주세요.', 'error');
-    return null;
-  }
+  if (!name)  { document.getElementById('f-name').classList.add('error');  showStatus('이름을 입력해 주세요.', 'error');  return null; }
+  if (!phone || !/^[0-9\-+\s]{7,20}$/.test(phone)) { document.getElementById('f-phone').classList.add('error'); showStatus('올바른 연락처를 입력해 주세요.', 'error'); return null; }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { document.getElementById('f-email').classList.add('error'); showStatus('올바른 이메일 주소를 입력해 주세요.', 'error'); return null; }
   return { name, phone, email };
 }
 
@@ -58,10 +197,8 @@ function showStatus(msg, type) {
   el.className = 'form-status ' + type;
 }
 
-/* ── 다운로드 처리 ── */
 async function handleDownload() {
   if (!currentCard) return;
-
   const data = validateForm();
   if (!data) return;
 
@@ -69,34 +206,18 @@ async function handleDownload() {
   btn.disabled = true;
   btn.classList.add('loading');
 
-  // 리드 데이터 구성
-  const lead = {
-    id: Date.now(),
-    timestamp: new Date().toISOString(),
-    templateId: currentCard.id,
-    templateTitle: currentCard.title,
-    templateCategory: currentCard.tag,
-    name: data.name,
-    phone: data.phone,
-    email: data.email || null,
-  };
-
   try {
-    // 로컬 저장
-    saveLead(lead);
+    await saveLead({
+      name: data.name, phone: data.phone, email: data.email || null,
+      template_title: currentCard.title, template_category: currentCard.tag,
+    });
 
-    // 여기에 외부 API 전송 코드 추가 가능 (Google Sheets, Notion, DB 등)
-    // await sendToExternalDB(lead);
-
-    // 성공 처리
-    await new Promise(r => setTimeout(r, 800)); // 실제 전송 시 제거
     showStatus('✓ 신청 완료! 다운로드 링크를 준비했습니다.', 'success');
 
-    // 실제 다운로드 트리거 (파일 경로 설정)
-    // const url = `template/${currentCard.cat}_0${currentCard.id + 1}.html`;
-    // const a = document.createElement('a'); a.href = url; a.download = ''; a.click();
+    /* 실제 파일 다운로드 — 경로 확인 후 주석 해제
+    const url = `template/${currentCard.cat}_0${currentCard.id + 1}.html`;
+    const a = document.createElement('a'); a.href = url; a.download = ''; a.click(); */
 
-    // 버튼 완료 상태
     btn.innerHTML = '<span class="btn-text">✓ 완료</span>';
     btn.style.background = '#3DD68C';
     setTimeout(() => {
@@ -105,47 +226,31 @@ async function handleDownload() {
       btn.innerHTML = '<span class="btn-text">무료 다운로드</span><div class="spinner"></div>';
       btn.style.background = '';
     }, 3000);
-
-  } catch (err) {
+  } catch {
     showStatus('오류가 발생했습니다. 다시 시도해 주세요.', 'error');
     btn.disabled = false;
     btn.classList.remove('loading');
   }
 }
 
-/* ── 모달 열기 ── */
 function openModal(id) {
   currentCard = cards[id];
   const c = currentCard;
 
-  // 태그
   document.getElementById('m-tag').innerHTML =
     `<span class="tag tag-industry">${c.tag}</span>
      <span class="tag ${c.free ? 'tag-free' : 'tag-pro'}">${c.free ? '무료' : '프리미엄'}</span>`;
-
   document.getElementById('m-title').textContent = c.title;
   document.getElementById('m-desc').textContent  = c.desc;
-
-  // 기능 목록
   document.getElementById('m-features').innerHTML =
-    c.features.map(f =>
-      `<li class="modal-feat"><span class="feat-check">✓</span>${f}</li>`
-    ).join('');
+    c.features.map(f => `<li class="modal-feat"><span class="feat-check">✓</span>${f}</li>`).join('');
 
-  // 버튼 텍스트
   const btn = document.getElementById('m-cta');
   btn.innerHTML = `<span class="btn-text">${c.free ? '무료 다운로드' : '구매하기'}</span><div class="spinner"></div>`;
-  btn.style.background = '';
-  btn.disabled = false;
-  btn.classList.remove('loading');
+  btn.style.background = ''; btn.disabled = false; btn.classList.remove('loading');
 
-  // 폼 초기화
-  ['f-name','f-phone','f-email'].forEach(id => {
-    const el = document.getElementById(id);
-    el.value = ''; el.classList.remove('error');
-  });
-  const st = document.getElementById('form-status');
-  st.className = 'form-status'; st.textContent = '';
+  ['f-name','f-phone','f-email'].forEach(id => { const el = document.getElementById(id); el.value = ''; el.classList.remove('error'); });
+  const st = document.getElementById('form-status'); st.className = 'form-status'; st.textContent = '';
 
   document.getElementById('modal').classList.add('open');
 }
@@ -155,15 +260,19 @@ function closeModal(e) {
     document.getElementById('modal').classList.remove('open');
 }
 
-/* ── 카드 클릭 ── */
 document.querySelectorAll('.card').forEach(card => {
   card.addEventListener('click', () => openModal(+card.dataset.id));
 });
+
 document.querySelectorAll('.card-dl-btn').forEach(btn => {
-  btn.addEventListener('click', e => { e.stopPropagation(); openModal(+btn.closest('.card').dataset.id); });
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const url = btn.dataset.preview;
+    if (url) window.open(url, '_blank');
+    else openModal(+btn.closest('.card').dataset.id);
+  });
 });
 
-/* ── 필터 ── */
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));

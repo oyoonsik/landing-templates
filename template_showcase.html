@@ -4,32 +4,364 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>상담 전환 템플릿 | 무료 랜딩페이지 모음</title>
-<meta name="description" content="병원·학원·부동산·다이어트·뷰티 업종 맞춤 상담 전환 랜딩페이지 템플릿 무료 공개. 구조만 바꿔도 문의가 달라집니다.">
-<meta property="og:title" content="상담 전환 템플릿 — 무료 랜딩페이지 모음">
-<meta property="og:description" content="광고비 쓰는데 문의 안 오죠? 랜딩 구조를 바꾸세요.">
-
-<link rel="stylesheet" href="css/template.css">
-
+<meta name="description" content="병원·학원·부동산·다이어트·뷰티 업종 맞춤 상담 전환 랜딩페이지 템플릿 무료 공개.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+:root {
+  --red: #FF503C;
+  --red-light: rgba(255,80,60,0.10);
+  --red-border: rgba(255,80,60,0.25);
+  --bg: #0C0C0C;
+  --surface: #141414;
+  --surface2: #1C1C1C;
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.16);
+  --text: #F5F5F3;
+  --muted: rgba(245,245,243,0.45);
+  --muted2: rgba(245,245,243,0.25);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+a { text-decoration: none; color: inherit; }
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 60px;
+  background: rgba(12,12,12,0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 0.5px solid var(--border);
+}
+.nav-logo { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; }
+.nav-logo span { color: var(--red); }
+.nav-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--red); color: #fff;
+  font-size: 13px; font-weight: 600;
+  padding: 9px 20px; border-radius: 100px;
+  transition: opacity 0.15s;
+}
+.nav-cta:hover { opacity: 0.88; }
+
+/* HERO */
+.hero {
+  padding: 100px 24px 72px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -180px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 500px;
+  background: radial-gradient(circle, rgba(255,80,60,0.13) 0%, transparent 68%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 0.5px solid var(--red-border); color: var(--red);
+  font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+  padding: 6px 16px; border-radius: 100px;
+  margin-bottom: 32px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-badge::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--red);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+.hero h1 {
+  font-size: clamp(32px, 7vw, 64px); font-weight: 900;
+  letter-spacing: -0.035em; line-height: 1.1; margin-bottom: 20px;
+  animation: fadeUp 0.6s 0.08s ease both;
+}
+.hero h1 .red { color: var(--red); }
+.hero p {
+  font-size: clamp(15px, 2.5vw, 18px); color: var(--muted);
+  line-height: 1.7; margin-bottom: 48px;
+  animation: fadeUp 0.6s 0.16s ease both;
+}
+
+/* FILTER */
+.filter-wrap {
+  max-width: 760px; margin: 0 auto 56px;
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  animation: fadeUp 0.6s 0.22s ease both;
+}
+.filter-btn {
+  padding: 9px 20px; border-radius: 100px;
+  border: 0.5px solid var(--border); background: transparent;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.18s;
+}
+.filter-btn:hover { border-color: var(--border-hover); color: var(--text); }
+.filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+/* GRID */
+.grid-wrap {
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 24px 100px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 16px; overflow: hidden; cursor: pointer;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  animation: fadeUp 0.5s ease both;
+}
+.card:hover { transform: translateY(-4px); border-color: var(--border-hover); box-shadow: 0 16px 48px rgba(0,0,0,0.4); }
+.card.hidden { display: none; }
+
+.card-thumb {
+  width: 100%; aspect-ratio: 16/10;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.card-thumb .thumb-bg {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; padding: 20px; gap: 8px;
+}
+.mock-hero {
+  background: rgba(255,80,60,0.08); border-radius: 8px; padding: 14px 16px;
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+}
+.mock-line { height: 8px; border-radius: 4px; background: rgba(255,255,255,0.12); margin-bottom: 6px; }
+.mock-line.red { background: rgba(255,80,60,0.5); width: 60%; }
+.mock-line.short { width: 45%; }
+.mock-line.med { width: 72%; }
+.mock-btn-row { display: flex; gap: 6px; margin-top: 10px; }
+.mock-cta { height: 20px; width: 80px; border-radius: 20px; background: var(--red); opacity: 0.85; }
+.mock-section { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.mock-block { height: 32px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 0.5px solid rgba(255,255,255,0.08); }
+
+.thumb-hospital { background: #0F1520; }
+.thumb-diet     { background: #0E1A14; }
+.thumb-academy  { background: #14100E; }
+.thumb-estate   { background: #0E1118; }
+.thumb-beauty   { background: #1A0E18; }
+
+.card-body { padding: 20px 22px 22px; }
+.card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.tag { font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 100px; letter-spacing: 0.04em; }
+.tag-industry { background: var(--red-light); color: var(--red); border: 0.5px solid var(--red-border); }
+.tag-free { background: rgba(40,200,120,0.1); color: #3DD68C; border: 0.5px solid rgba(40,200,120,0.2); }
+.tag-pro { background: rgba(180,130,255,0.1); color: #B482FF; border: 0.5px solid rgba(180,130,255,0.2); }
+
+.card-title { font-size: 17px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; line-height: 1.3; }
+.card-desc { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 18px; }
+.card-footer { display: flex; align-items: center; justify-content: space-between; }
+.card-price { font-size: 15px; font-weight: 700; color: var(--red); }
+.card-price.free { color: #3DD68C; }
+.card-dl-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600; color: var(--text); opacity: 0.7;
+  padding: 8px 16px; border-radius: 100px; border: 0.5px solid var(--border);
+  transition: all 0.16s; background: transparent; cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.card-dl-btn:hover { opacity: 1; border-color: var(--border-hover); background: var(--surface2); }
+
+/* MODAL */
+.modal-bg {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+  align-items: center; justify-content: center; padding: 24px;
+}
+.modal-bg.open { display: flex; }
+
+.modal {
+  background: var(--surface); border: 0.5px solid var(--border-hover);
+  border-radius: 20px; width: 100%; max-width: 520px;
+  padding: 36px; position: relative;
+  animation: modalIn 0.25s ease both;
+  max-height: 90vh; overflow-y: auto;
+}
+.modal-close {
+  position: absolute; top: 18px; right: 20px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--surface2); border: 0.5px solid var(--border);
+  color: var(--muted); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.modal-close:hover { background: var(--border); }
+
+.modal-tag { margin-bottom: 16px; }
+.modal-title { font-size: 22px; font-weight: 900; letter-spacing: -0.025em; line-height: 1.3; margin-bottom: 10px; }
+.modal-desc { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 20px; }
+
+.modal-features {
+  list-style: none; display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 24px;
+}
+.modal-feat { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(245,245,243,0.75); }
+.feat-check {
+  width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%;
+  background: rgba(61,214,140,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: #3DD68C;
+}
+
+/* ── LEAD FORM ── */
+.lead-form-section {
+  border-top: 0.5px solid var(--border);
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+.lead-form-label {
+  font-size: 13px; font-weight: 600;
+  color: var(--muted); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 6px;
+  letter-spacing: 0.02em;
+}
+.lead-form-label::before {
+  content: '';
+  display: inline-block; width: 4px; height: 14px;
+  background: var(--red); border-radius: 2px;
+}
+.form-fields { display: flex; flex-direction: column; gap: 10px; }
+.form-field {
+  display: flex; flex-direction: column; gap: 5px;
+}
+.form-field label {
+  font-size: 12px; font-weight: 500;
+  color: var(--muted); letter-spacing: 0.03em;
+}
+.form-field input {
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s;
+  width: 100%;
+}
+.form-field input::placeholder { color: var(--muted2); }
+.form-field input:focus {
+  border-color: var(--red);
+  background: rgba(255,80,60,0.04);
+}
+.form-field input.error { border-color: rgba(255,80,60,0.6); }
+
+/* status messages */
+.form-status {
+  font-size: 13px; padding: 10px 14px;
+  border-radius: 10px; margin-top: 4px;
+  display: none;
+}
+.form-status.success {
+  display: block;
+  background: rgba(61,214,140,0.08);
+  border: 0.5px solid rgba(61,214,140,0.2);
+  color: #3DD68C;
+}
+.form-status.error {
+  display: block;
+  background: rgba(255,80,60,0.08);
+  border: 0.5px solid var(--red-border);
+  color: var(--red);
+}
+
+/* modal actions */
+.modal-actions { display: flex; gap: 10px; }
+.btn-modal-main {
+  flex: 1; background: var(--red); color: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 700;
+  padding: 14px 20px; border-radius: 12px; border: none;
+  cursor: pointer; transition: opacity 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-modal-main:hover { opacity: 0.88; }
+.btn-modal-main:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-modal-sub {
+  padding: 14px 20px; border-radius: 12px;
+  border: 0.5px solid var(--border-hover); background: transparent;
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; white-space: nowrap;
+}
+.btn-modal-sub:hover { background: var(--surface2); color: var(--text); }
+
+.spinner {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+.btn-modal-main.loading .spinner { display: block; }
+.btn-modal-main.loading .btn-text { display: none; }
+
+/* BANNER */
+.banner {
+  margin: 0 auto; margin-bottom: 50px; max-width: 1100px;
+  background: var(--red-light); border: 0.5px solid var(--red-border);
+  border-radius: 16px; padding: 32px 40px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+}
+.banner-text h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
+.banner-text p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+.btn-banner {
+  background: var(--red); color: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 700;
+  padding: 14px 28px; border-radius: 100px; border: none;
+  cursor: pointer; white-space: nowrap; transition: opacity 0.15s;
+}
+.btn-banner:hover { opacity: 0.88; }
+
+/* FOOTER */
+footer { border-top: 0.5px solid var(--border); padding: 32px 24px; text-align: center; font-size: 12px; color: var(--muted2); }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+@keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 600px) {
+  nav { padding: 0 20px; }
+  .grid-wrap { grid-template-columns: 1fr; }
+  .banner { flex-direction: column; text-align: center; }
+  .modal { padding: 28px 22px; }
+  .modal-actions { flex-direction: column; }
+}
+</style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <div class="nav-logo">상담전환<span>템플릿</span></div>
-  <!-- ✅ href를 카카오 채널 또는 오픈채팅 URL로 교체 -->
+  <div class="nav-logo"><a href="#">상담전환<span>템플릿</span></a></div>
   <a href="https://open.kakao.com/YOUR_LINK" class="nav-cta">무료 상담 받기 →</a>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-badge">무료 템플릿 공개 중</div>
   <h1>상담으로 돈 버는 업종<br><span class="red">전용 랜딩페이지</span></h1>
   <p>예쁜 디자인 말고, 전환되는 구조.<br>업종별 맞춤 템플릿을 무료로 가져가세요.</p>
-
-  <!-- FILTER -->
   <div class="filter-wrap">
     <button class="filter-btn active" data-filter="all">전체</button>
     <button class="filter-btn" data-filter="hospital">병원·의원</button>
@@ -40,7 +372,6 @@
   </div>
 </section>
 
-<!-- GRID -->
 <div class="grid-wrap" id="grid">
 
   <!-- 병원 1 -->
@@ -53,10 +384,7 @@
           <div class="mock-line short"></div>
           <div class="mock-btn-row"><div class="mock-cta"></div></div>
         </div>
-        <div class="mock-section">
-          <div class="mock-block"></div>
-          <div class="mock-block"></div>
-        </div>
+        <div class="mock-section"><div class="mock-block"></div><div class="mock-block"></div></div>
       </div>
     </div>
     <div class="card-body">
@@ -83,9 +411,7 @@
           <div class="mock-btn-row"><div class="mock-cta"></div></div>
         </div>
         <div class="mock-section" style="grid-template-columns:1fr 1fr 1fr">
-          <div class="mock-block"></div>
-          <div class="mock-block"></div>
-          <div class="mock-block"></div>
+          <div class="mock-block"></div><div class="mock-block"></div><div class="mock-block"></div>
         </div>
       </div>
     </div>
@@ -112,10 +438,7 @@
           <div class="mock-line short"></div>
           <div class="mock-btn-row"><div class="mock-cta" style="background:#3DD68C"></div></div>
         </div>
-        <div class="mock-section">
-          <div class="mock-block"></div>
-          <div class="mock-block"></div>
-        </div>
+        <div class="mock-section"><div class="mock-block"></div><div class="mock-block"></div></div>
       </div>
     </div>
     <div class="card-body">
@@ -169,9 +492,7 @@
           <div class="mock-line short"></div>
           <div class="mock-btn-row"><div class="mock-cta" style="background:#B482FF"></div></div>
         </div>
-        <div class="mock-section">
-          <div class="mock-block"></div><div class="mock-block"></div>
-        </div>
+        <div class="mock-section"><div class="mock-block"></div><div class="mock-block"></div></div>
       </div>
     </div>
     <div class="card-body">
@@ -225,9 +546,7 @@
           <div class="mock-line short"></div>
           <div class="mock-btn-row"><div class="mock-cta" style="background:#4B9EF0"></div></div>
         </div>
-        <div class="mock-section">
-          <div class="mock-block"></div><div class="mock-block"></div>
-        </div>
+        <div class="mock-section"><div class="mock-block"></div><div class="mock-block"></div></div>
       </div>
     </div>
     <div class="card-body">
@@ -253,9 +572,7 @@
           <div class="mock-line short"></div>
           <div class="mock-btn-row"><div class="mock-cta" style="background:#F060B0"></div></div>
         </div>
-        <div class="mock-section">
-          <div class="mock-block"></div><div class="mock-block"></div>
-        </div>
+        <div class="mock-section"><div class="mock-block"></div><div class="mock-block"></div></div>
       </div>
     </div>
     <div class="card-body">
@@ -272,7 +589,7 @@
     </div>
   </div>
 
-</div><!-- /grid -->
+</div>
 
 <!-- BOTTOM BANNER -->
 <div class="banner">
@@ -280,10 +597,7 @@
     <h3>📦 전 업종 패키지 — 한 번에 다 가져가기</h3>
     <p>5개 업종 전체 템플릿 + 카카오·네이버 연동 가이드 + 무제한 클라이언트 라이선스</p>
   </div>
-  <!-- ✅ 여기도 실제 링크로 교체 -->
-  <button class="btn-banner" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">
-    패키지 문의하기 →
-  </button>
+  <button class="btn-banner" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">패키지 문의하기 →</button>
 </div>
 
 <!-- MODAL -->
@@ -294,8 +608,32 @@
     <h2 class="modal-title" id="m-title"></h2>
     <p class="modal-desc" id="m-desc"></p>
     <ul class="modal-features" id="m-features"></ul>
+
+    <!-- ── LEAD CAPTURE FORM ── -->
+    <div class="lead-form-section">
+      <div class="lead-form-label">무료 다운로드를 위해 정보를 입력해 주세요</div>
+      <div class="form-fields">
+        <div class="form-field">
+          <label>이름 *</label>
+          <input type="text" id="f-name" placeholder="홍길동" maxlength="30">
+        </div>
+        <div class="form-field">
+          <label>연락처 *</label>
+          <input type="tel" id="f-phone" placeholder="010-0000-0000" maxlength="20">
+        </div>
+        <div class="form-field">
+          <label>이메일</label>
+          <input type="email" id="f-email" placeholder="example@email.com" maxlength="80">
+        </div>
+      </div>
+      <div class="form-status" id="form-status"></div>
+    </div>
+
     <div class="modal-actions">
-      <button class="btn-modal-main" id="m-cta">무료 다운로드</button>
+      <button class="btn-modal-main" id="m-cta" onclick="handleDownload()">
+        <span class="btn-text">무료 다운로드</span>
+        <div class="spinner"></div>
+      </button>
       <button class="btn-modal-sub" onclick="document.getElementById('modal').classList.remove('open')">닫기</button>
     </div>
   </div>

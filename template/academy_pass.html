@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>○○학원 | 합격률 1위 · 무료 상담 신청</title>
+<meta name="description" content="성적이 오르는 구조가 다릅니다. 지금 무료 상담 신청하세요.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --purple: #B482FF;
+  --purple2: #9B5FE8;
+  --purple-light: rgba(180,130,255,0.10);
+  --purple-border: rgba(180,130,255,0.28);
+  --bg: #09080F;
+  --surface: #10091A;
+  --surface2: #18102A;
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.15);
+  --text: #F8F5FF;
+  --muted: rgba(248,245,255,0.50);
+  --muted2: rgba(248,245,255,0.28);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+
+/* ── FLOATING ── */
+.float-cta {
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex; gap: 10px;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+}
+.float-btn {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px; font-weight: 700;
+  padding: 14px 26px; border-radius: 100px; border: none;
+  cursor: pointer; white-space: nowrap;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.float-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+.float-btn.kakao { background: #FEE500; color: #1A1A1A; }
+.float-btn.call  { background: var(--purple); color: #fff; }
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(9,8,15,0.90);
+  backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+}
+.nav-logo { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+.nav-logo span { color: var(--purple); }
+.nav-cta {
+  background: var(--purple); color: #fff;
+  font-size: 13px; font-weight: 700;
+  padding: 9px 20px; border-radius: 100px;
+  transition: opacity 0.15s;
+}
+.nav-cta:hover { opacity: 0.88; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 80px 24px 60px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -200px; left: 50%;
+  transform: translateX(-50%);
+  width: 700px; height: 600px;
+  background: radial-gradient(circle, rgba(180,130,255,0.13) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--purple-light);
+  border: 0.5px solid var(--purple-border);
+  color: var(--purple);
+  font-size: 12px; font-weight: 600;
+  padding: 7px 18px; border-radius: 100px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-badge::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--purple);
+  animation: blink 1.6s infinite;
+}
+
+.hero h1 {
+  font-size: clamp(34px, 8vw, 68px);
+  font-weight: 900;
+  line-height: 1.1; letter-spacing: -0.035em;
+  margin-bottom: 20px;
+  animation: fadeUp 0.6s 0.08s ease both;
+}
+.hero h1 .accent { color: var(--purple); }
+
+.hero p {
+  font-size: clamp(15px, 2.5vw, 19px);
+  color: var(--muted); line-height: 1.75;
+  margin-bottom: 44px;
+  animation: fadeUp 0.6s 0.14s ease both;
+}
+.hero p strong { color: var(--text); font-weight: 500; }
+
+.hero-btns {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.btn-main {
+  background: var(--purple); color: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px; font-weight: 700;
+  padding: 17px 36px; border-radius: 100px; border: none;
+  cursor: pointer; transition: opacity 0.15s, transform 0.15s;
+  box-shadow: 0 8px 32px rgba(180,130,255,0.3);
+}
+.btn-main:hover { opacity: 0.9; transform: translateY(-2px); }
+.btn-sub {
+  background: rgba(255,255,255,0.07);
+  border: 0.5px solid var(--border-hover);
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px; font-weight: 500;
+  padding: 17px 36px; border-radius: 100px;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-sub:hover { background: rgba(255,255,255,0.12); color: var(--text); }
+
+.trust-bar {
+  display: flex; gap: 28px; flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 56px; padding-top: 36px;
+  border-top: 0.5px solid var(--border);
+  animation: fadeUp 0.6s 0.26s ease both;
+}
+.trust-item { text-align: center; }
+.trust-num {
+  font-size: 28px; font-weight: 900;
+  color: var(--purple); letter-spacing: -0.04em; line-height: 1;
+}
+.trust-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* ── SECTION ── */
+.section {
+  max-width: 700px; margin: 0 auto;
+  padding: 80px 24px;
+}
+.sec-label {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; color: var(--purple);
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.sec-title {
+  font-size: clamp(24px, 4.5vw, 36px);
+  font-weight: 900; letter-spacing: -0.03em;
+  line-height: 1.2; margin-bottom: 14px;
+}
+.sec-desc {
+  font-size: 15px; color: var(--muted);
+  line-height: 1.8; margin-bottom: 40px;
+}
+
+/* ── GRAPH SECTION ── */
+.graph-wrap {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 20px; padding: 32px 28px;
+}
+.graph-title {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 28px; color: var(--text);
+}
+.graph-rows { display: flex; flex-direction: column; gap: 20px; }
+.graph-row { }
+.graph-label-row {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 8px;
+}
+.g-subject { font-size: 13px; font-weight: 600; }
+.g-score {
+  font-size: 13px; font-weight: 700;
+  color: var(--purple);
+}
+.g-bar-bg {
+  width: 100%; height: 10px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 100px; overflow: hidden;
+}
+.g-bar {
+  height: 100%; border-radius: 100px;
+  background: linear-gradient(90deg, var(--purple2), var(--purple));
+  animation: growBar 1.2s ease both;
+}
+.graph-note {
+  margin-top: 20px; padding-top: 16px;
+  border-top: 0.5px solid var(--border);
+  font-size: 12px; color: var(--muted);
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ── PASS CARDS ── */
+.pass-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+}
+.pass-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 16px; padding: 24px 20px;
+  position: relative; overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.pass-card:hover { border-color: var(--purple-border); transform: translateY(-2px); }
+.pass-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--purple2), var(--purple));
+}
+.pass-univ {
+  font-size: 18px; font-weight: 900;
+  letter-spacing: -0.02em; margin-bottom: 4px;
+}
+.pass-dept { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.pass-student {
+  display: flex; align-items: center; gap: 10px;
+}
+.ps-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--purple-light);
+  border: 0.5px solid var(--purple-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--purple);
+}
+.ps-name { font-size: 13px; font-weight: 600; }
+.ps-period { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.pass-badge {
+  position: absolute; top: 16px; right: 16px;
+  background: var(--purple-light);
+  border: 0.5px solid var(--purple-border);
+  color: var(--purple);
+  font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 100px;
+}
+
+/* ── TEACHER CARDS ── */
+.teacher-list { display: flex; flex-direction: column; gap: 14px; }
+.teacher-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 16px; padding: 24px;
+  display: flex; gap: 18px; align-items: flex-start;
+  transition: border-color 0.2s;
+}
+.teacher-card:hover { border-color: var(--purple-border); }
+.teacher-avatar {
+  flex-shrink: 0; width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--purple-light);
+  border: 1.5px solid var(--purple-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+.teacher-info { flex: 1; }
+.teacher-name { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
+.teacher-subject {
+  font-size: 12px; color: var(--purple);
+  font-weight: 600; margin-bottom: 10px;
+}
+.teacher-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.t-tag {
+  font-size: 11px; font-weight: 500;
+  background: var(--purple-light);
+  border: 0.5px solid var(--purple-border);
+  color: var(--purple);
+  padding: 3px 10px; border-radius: 100px;
+}
+.teacher-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* ── REVIEW ── */
+.review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.review-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 22px;
+  transition: border-color 0.2s;
+}
+.review-card:hover { border-color: var(--purple-border); }
+.r-stars { color: var(--purple); font-size: 13px; margin-bottom: 10px; }
+.r-text {
+  font-size: 13px; color: rgba(248,245,255,0.72);
+  line-height: 1.75; margin-bottom: 14px;
+}
+.r-author { display: flex; align-items: center; gap: 8px; }
+.r-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--purple-light);
+  border: 0.5px solid var(--purple-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--purple);
+}
+.r-name { font-size: 12px; font-weight: 600; }
+.r-tag  { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+/* ── CURRICULUM ── */
+.curriculum-list { display: flex; flex-direction: column; gap: 10px; }
+.curriculum-item {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 20px 22px;
+  display: flex; align-items: center; gap: 16px;
+  transition: border-color 0.2s;
+}
+.curriculum-item:hover { border-color: var(--purple-border); }
+.curr-step {
+  flex-shrink: 0; width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--purple-light);
+  border: 0.5px solid var(--purple-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900; color: var(--purple);
+}
+.curr-body { flex: 1; }
+.curr-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+.curr-desc  { font-size: 12px; color: var(--muted); line-height: 1.55; }
+.curr-period {
+  flex-shrink: 0;
+  font-size: 11px; font-weight: 600;
+  color: var(--purple);
+  background: var(--purple-light);
+  border: 0.5px solid var(--purple-border);
+  padding: 4px 10px; border-radius: 100px;
+  white-space: nowrap;
+}
+
+/* ── CONSULT FORM ── */
+.form-box {
+  background: var(--surface);
+  border: 0.5px solid var(--purple-border);
+  border-radius: 20px; padding: 36px 32px;
+}
+.form-title {
+  font-size: 20px; font-weight: 900;
+  letter-spacing: -0.025em; margin-bottom: 6px;
+}
+.form-desc { font-size: 14px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block; font-size: 13px; font-weight: 600;
+  margin-bottom: 8px; color: rgba(248,245,255,0.85);
+}
+.form-label .req { color: var(--purple); margin-left: 2px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 0.5px solid var(--border-hover);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  padding: 13px 16px;
+  transition: border-color 0.15s;
+  outline: none;
+}
+.form-input::placeholder, .form-textarea::placeholder { color: var(--muted2); }
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--purple-border);
+}
+.form-select { appearance: none; cursor: pointer; }
+.form-textarea { resize: none; height: 90px; line-height: 1.6; }
+.form-submit {
+  width: 100%;
+  background: var(--purple); color: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px; font-weight: 700;
+  padding: 17px; border-radius: 12px; border: none;
+  cursor: pointer; margin-top: 8px;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.form-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+.form-note {
+  text-align: center; margin-top: 12px;
+  font-size: 12px; color: var(--muted2);
+}
+
+/* ── FAQ ── */
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+.faq-item {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.faq-q {
+  width: 100%; text-align: left;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 600;
+  background: none; border: none; cursor: pointer;
+  color: var(--text); transition: background 0.15s;
+}
+.faq-q:hover { background: rgba(255,255,255,0.03); }
+.faq-icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--purple-light);
+  border: 0.5px solid var(--purple-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--purple);
+  transition: transform 0.25s; flex-shrink: 0;
+}
+.faq-a {
+  display: none;
+  padding: 14px 20px 18px;
+  font-size: 13px; color: var(--muted); line-height: 1.8;
+  border-top: 0.5px solid var(--border);
+}
+.faq-item.open .faq-a { display: block; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+
+/* ── FINAL CTA ── */
+.final-cta {
+  background: var(--surface);
+  border-top: 0.5px solid var(--border);
+  padding: 88px 24px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.final-cta::before {
+  content: '';
+  position: absolute; top: -100px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 500px;
+  background: radial-gradient(circle, rgba(180,130,255,0.11) 0%, transparent 65%);
+  pointer-events: none;
+}
+.final-cta h2 {
+  font-size: clamp(26px, 5vw, 44px);
+  font-weight: 900; letter-spacing: -0.03em;
+  line-height: 1.2; margin-bottom: 14px; position: relative;
+}
+.final-cta h2 span { color: var(--purple); }
+.final-cta p {
+  font-size: 15px; color: var(--muted);
+  line-height: 1.75; margin-bottom: 40px; position: relative;
+}
+.final-btns {
+  display: flex; gap: 12px;
+  justify-content: center; flex-wrap: wrap; position: relative;
+}
+
+/* ── DIVIDER ── */
+.divider { height: 0.5px; background: var(--border); }
+
+/* ── FOOTER ── */
+footer {
+  padding: 28px 24px; text-align: center;
+  border-top: 0.5px solid var(--border);
+  font-size: 12px; color: var(--muted2); line-height: 1.8;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+}
+@keyframes growBar {
+  from { width: 0; }
+}
+.reveal {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 560px) {
+  .pass-grid, .review-grid { grid-template-columns: 1fr; }
+  .float-cta { width: calc(100% - 32px); }
+  .float-btn { flex: 1; justify-content: center; }
+  .form-box { padding: 24px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- FLOATING -->
+<div class="float-cta">
+  <button class="float-btn kakao" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">💬 카카오 상담</button>
+  <button class="float-btn call" onclick="window.location.href='tel:010-0000-0000'">📞 전화 문의</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">○○<span>학원</span></div>
+  <a href="#consult" class="nav-cta">무료 상담 신청 →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🏆 2024 입시 합격률 지역 1위</div>
+  <h1>
+    성적이 오르는<br>
+    <span class="accent">구조</span>가<br>
+    다릅니다
+  </h1>
+  <p>
+    <strong>합격한 학생들</strong>이 선택한 학원.<br>
+    무료 상담 신청하고 커리큘럼을 직접 확인하세요.
+  </p>
+  <div class="hero-btns">
+    <button class="btn-main" onclick="document.getElementById('consult').scrollIntoView({behavior:'smooth'})">📋 무료 상담 신청하기</button>
+    <button class="btn-sub" onclick="document.getElementById('results').scrollIntoView({behavior:'smooth'})">합격 결과 보기</button>
+  </div>
+
+  <div class="trust-bar">
+    <div class="trust-item">
+      <div class="trust-num">94%</div>
+      <div class="trust-label">목표 대학 합격률</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">12년</div>
+      <div class="trust-label">입시 전문 운영</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">3,200+</div>
+      <div class="trust-label">누적 합격생</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">SKY</div>
+      <div class="trust-label">최상위 합격 실적</div>
+    </div>
+  </div>
+</section>
+
+<!-- GRAPH -->
+<section class="section">
+  <p class="sec-label reveal">성적 향상 데이터</p>
+  <h2 class="sec-title reveal">6개월 만에<br>이만큼 올랐습니다</h2>
+  <p class="sec-desc reveal">2024년 수강생 평균 성적 향상 데이터 기준입니다</p>
+
+  <div class="graph-wrap reveal">
+    <div class="graph-title">📊 과목별 평균 등급 향상 (6개월 기준)</div>
+    <div class="graph-rows">
+      <div class="graph-row">
+        <div class="graph-label-row">
+          <span class="g-subject">국어</span>
+          <span class="g-score">평균 2.4등급 향상</span>
+        </div>
+        <div class="g-bar-bg"><div class="g-bar" style="width:80%; animation-delay:0.1s"></div></div>
+      </div>
+      <div class="graph-row">
+        <div class="graph-label-row">
+          <span class="g-subject">수학</span>
+          <span class="g-score">평균 2.8등급 향상</span>
+        </div>
+        <div class="g-bar-bg"><div class="g-bar" style="width:93%; animation-delay:0.2s"></div></div>
+      </div>
+      <div class="graph-row">
+        <div class="graph-label-row">
+          <span class="g-subject">영어</span>
+          <span class="g-score">평균 1.9등급 향상</span>
+        </div>
+        <div class="g-bar-bg"><div class="g-bar" style="width:63%; animation-delay:0.3s"></div></div>
+      </div>
+      <div class="graph-row">
+        <div class="graph-label-row">
+          <span class="g-subject">탐구</span>
+          <span class="g-score">평균 2.1등급 향상</span>
+        </div>
+        <div class="g-bar-bg"><div class="g-bar" style="width:70%; animation-delay:0.4s"></div></div>
+      </div>
+    </div>
+    <div class="graph-note">
+      📌 2024학년도 수강생 중 6개월 이상 수강자 기준 · 개인차가 있을 수 있습니다
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PASS RESULTS -->
+<section class="section" id="results">
+  <p class="sec-label reveal">합격 실적</p>
+  <h2 class="sec-title reveal">우리 학원 출신<br>합격생들입니다</h2>
+  <p class="sec-desc reveal">과장 없이, 실제 합격한 학생들의 이야기입니다</p>
+
+  <div class="pass-grid">
+    <div class="pass-card reveal">
+      <div class="pass-badge">2024 합격</div>
+      <div class="pass-univ">서울대학교</div>
+      <div class="pass-dept">경영학과</div>
+      <div class="pass-student">
+        <div class="ps-avatar">김</div>
+        <div>
+          <div class="ps-name">김○○ 학생</div>
+          <div class="ps-period">2년 수강 · 국어·수학 담당</div>
+        </div>
+      </div>
+    </div>
+    <div class="pass-card reveal">
+      <div class="pass-badge">2024 합격</div>
+      <div class="pass-univ">연세대학교</div>
+      <div class="pass-dept">의과대학</div>
+      <div class="pass-student">
+        <div class="ps-avatar">이</div>
+        <div>
+          <div class="ps-name">이○○ 학생</div>
+          <div class="ps-period">1.5년 수강 · 과학탐구 담당</div>
+        </div>
+      </div>
+    </div>
+    <div class="pass-card reveal">
+      <div class="pass-badge">2024 합격</div>
+      <div class="pass-univ">고려대학교</div>
+      <div class="pass-dept">법학과</div>
+      <div class="pass-student">
+        <div class="ps-avatar">박</div>
+        <div>
+          <div class="ps-name">박○○ 학생</div>
+          <div class="ps-period">1년 수강 · 국어·영어 담당</div>
+        </div>
+      </div>
+    </div>
+    <div class="pass-card reveal">
+      <div class="pass-badge">2024 합격</div>
+      <div class="pass-univ">성균관대학교</div>
+      <div class="pass-dept">반도체시스템공학</div>
+      <div class="pass-student">
+        <div class="ps-avatar">최</div>
+        <div>
+          <div class="ps-name">최○○ 학생</div>
+          <div class="ps-period">2년 수강 · 수학·물리 담당</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TEACHERS -->
+<section class="section">
+  <p class="sec-label reveal">강사 소개</p>
+  <h2 class="sec-title reveal">검증된 강사진이<br>직접 가르칩니다</h2>
+
+  <div class="teacher-list">
+    <div class="teacher-card reveal">
+      <div class="teacher-avatar">👨‍🏫</div>
+      <div class="teacher-info">
+        <div class="teacher-name">홍○○ 강사</div>
+        <div class="teacher-subject">수학 전담 · 경력 12년</div>
+        <div class="teacher-tags">
+          <span class="t-tag">서울대 수학과 졸업</span>
+          <span class="t-tag">수능 만점 강사</span>
+          <span class="t-tag">킬러문항 전문</span>
+        </div>
+        <p class="teacher-desc">수능 수학 킬러문항 풀이법 전문. 개념부터 고난이도까지 단계별로 확실하게 잡아드립니다.</p>
+      </div>
+    </div>
+    <div class="teacher-card reveal">
+      <div class="teacher-avatar">👩‍🏫</div>
+      <div class="teacher-info">
+        <div class="teacher-name">김○○ 강사</div>
+        <div class="teacher-subject">국어 전담 · 경력 9년</div>
+        <div class="teacher-tags">
+          <span class="t-tag">연세대 국문과 졸업</span>
+          <span class="t-tag">비문학 전문</span>
+          <span class="t-tag">EBS 연계 특화</span>
+        </div>
+        <p class="teacher-desc">비문학 독해력과 문학 분석력을 동시에 잡는 커리큘럼. 단기간 등급 향상 전문입니다.</p>
+      </div>
+    </div>
+    <div class="teacher-card reveal">
+      <div class="teacher-avatar">👨‍🏫</div>
+      <div class="teacher-info">
+        <div class="teacher-name">이○○ 강사</div>
+        <div class="teacher-subject">영어 전담 · 경력 8년</div>
+        <div class="teacher-tags">
+          <span class="t-tag">고려대 영문과 졸업</span>
+          <span class="t-tag">독해·문법 동시</span>
+          <span class="t-tag">수능 1등급 전문</span>
+        </div>
+        <p class="teacher-desc">수능 영어 1등급 취득을 위한 체계적인 독해 훈련. 문법과 어휘를 동시에 정복합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REVIEWS -->
+<section class="section">
+  <p class="sec-label reveal">수강생 후기</p>
+  <h2 class="sec-title reveal">직접 다녀보신 분들의<br>솔직한 이야기</h2>
+
+  <div class="review-grid">
+    <div class="review-card reveal">
+      <div class="r-stars">★★★★★</div>
+      <p class="r-text">수학 5등급에서 시작해서 6개월 만에 2등급 됐어요. 선생님이 제 약점을 정확히 짚어주셔서 효율적으로 공부할 수 있었습니다.</p>
+      <div class="r-author">
+        <div class="r-avatar">박</div>
+        <div>
+          <div class="r-name">박○○ 학생</div>
+          <div class="r-tag">고3 · 수학 5→2등급</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="r-stars">★★★★★</div>
+      <p class="r-text">재수하면서 선택한 학원인데 정말 잘 선택했어요. 1:1 관리가 철저하고 모의고사 분석도 세밀하게 해줘서 성적이 눈에 띄게 올랐어요.</p>
+      <div class="r-author">
+        <div class="r-avatar">이</div>
+        <div>
+          <div class="r-name">이○○ 학생</div>
+          <div class="r-tag">재수생 · 연세대 합격</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="r-stars">★★★★★</div>
+      <p class="r-text">국어가 늘 발목을 잡았는데 비문학 구조 분석법을 배우고 나서 확실히 달라졌어요. 선생님 설명이 명쾌해서 이해가 잘 됩니다.</p>
+      <div class="r-author">
+        <div class="r-avatar">김</div>
+        <div>
+          <div class="r-name">김○○ 학생</div>
+          <div class="r-tag">고2 · 국어 4→2등급</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="r-stars">★★★★★</div>
+      <p class="r-text">학원 분위기 자체가 공부하기 좋아요. 자습실도 넓고 선생님들이 질문을 언제든지 받아줘서 모르는 게 쌓이질 않아요.</p>
+      <div class="r-author">
+        <div class="r-avatar">최</div>
+        <div>
+          <div class="r-name">최○○ 학생</div>
+          <div class="r-tag">고3 · 성균관대 합격</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CURRICULUM -->
+<section class="section">
+  <p class="sec-label reveal">커리큘럼</p>
+  <h2 class="sec-title reveal">단계별로 확실하게<br>올라갑니다</h2>
+
+  <div class="curriculum-list">
+    <div class="curriculum-item reveal">
+      <div class="curr-step">1</div>
+      <div class="curr-body">
+        <div class="curr-title">진단 평가 · 맞춤 학습 설계</div>
+        <p class="curr-desc">현재 수준 진단 후 목표 대학에 맞는 개인별 커리큘럼 설계</p>
+      </div>
+      <div class="curr-period">1주차</div>
+    </div>
+    <div class="curriculum-item reveal">
+      <div class="curr-step">2</div>
+      <div class="curr-body">
+        <div class="curr-title">기본 개념 완성</div>
+        <p class="curr-desc">수능 핵심 개념을 빈틈없이 정리. 기초가 흔들리면 고난도는 없다</p>
+      </div>
+      <div class="curr-period">2~5주차</div>
+    </div>
+    <div class="curriculum-item reveal">
+      <div class="curr-step">3</div>
+      <div class="curr-body">
+        <div class="curr-title">유형별 문제 풀이 집중 훈련</div>
+        <p class="curr-desc">출제 빈도 높은 유형부터 집중 공략. 실수 패턴 분석 및 교정</p>
+      </div>
+      <div class="curr-period">6~10주차</div>
+    </div>
+    <div class="curriculum-item reveal">
+      <div class="curr-step">4</div>
+      <div class="curr-body">
+        <div class="curr-title">실전 모의고사 + 약점 보완</div>
+        <p class="curr-desc">주 1회 실전 모의고사. 개인별 오답 분석 후 집중 보완 수업</p>
+      </div>
+      <div class="curr-period">11~16주차</div>
+    </div>
+    <div class="curriculum-item reveal">
+      <div class="curr-step">5</div>
+      <div class="curr-body">
+        <div class="curr-title">수능 D-30 최종 점검</div>
+        <p class="curr-desc">수능 직전 핵심 공식·개념 총정리. 멘탈 관리 및 컨디션 조절 코칭</p>
+      </div>
+      <div class="curr-period">D-30</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONSULT FORM -->
+<section class="section" id="consult">
+  <p class="sec-label reveal">무료 상담 신청</p>
+  <h2 class="sec-title reveal">지금 바로 신청하고<br>맞춤 커리큘럼 받으세요</h2>
+
+  <div class="form-box reveal">
+    <div class="form-title">📋 무료 상담 신청서</div>
+    <p class="form-desc">작성하신 정보로 24시간 내 연락드립니다</p>
+
+    <div class="form-group">
+      <label class="form-label">이름 <span class="req">*</span></label>
+      <input type="text" class="form-input" placeholder="홍길동">
+    </div>
+    <div class="form-group">
+      <label class="form-label">연락처 <span class="req">*</span></label>
+      <input type="tel" class="form-input" placeholder="010-0000-0000">
+    </div>
+    <div class="form-group">
+      <label class="form-label">학년</label>
+      <select class="form-select form-input">
+        <option value="" disabled selected>학년을 선택해주세요</option>
+        <option>고등학교 1학년</option>
+        <option>고등학교 2학년</option>
+        <option>고등학교 3학년</option>
+        <option>재수생</option>
+        <option>N수생</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">희망 과목</label>
+      <input type="text" class="form-input" placeholder="예) 수학, 국어, 영어">
+    </div>
+    <div class="form-group">
+      <label class="form-label">상담 내용 (선택)</label>
+      <textarea class="form-textarea" placeholder="궁금한 점이나 현재 상황을 자유롭게 작성해주세요"></textarea>
+    </div>
+    <button class="form-submit" onclick="submitForm()">무료 상담 신청하기</button>
+    <p class="form-note">📞 전화 상담: 010-0000-0000 · 평일 09:00~21:00</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section class="section">
+  <p class="sec-label reveal">자주 묻는 질문</p>
+  <h2 class="sec-title reveal">궁금한 점이 있으신가요?</h2>
+
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        현재 성적이 낮아도 수강이 가능한가요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">물론입니다. 오히려 성적이 낮을수록 향상 폭이 큽니다. 진단 평가 후 현재 수준에 맞는 커리큘럼부터 시작합니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        수업은 그룹으로 진행되나요, 1:1인가요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">소그룹(4~6명) 수업을 기본으로 하며, 추가 비용으로 1:1 수업도 가능합니다. 상담 시 자세히 안내드립니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        자습실은 이용할 수 있나요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">네, 수강생에게 자습실을 무료로 제공합니다. 운영 시간은 평일 08:00~23:00, 주말 09:00~22:00입니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        수능 외 내신 관리도 가능한가요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">가능합니다. 내신 시즌에는 학교별 기출 문제 분석과 내신 전용 특강을 별도로 운영합니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        등록 후 환불이 가능한가요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">학원법 및 소비자보호법에 따라 수강 일수 기준으로 환불 처리됩니다. 자세한 사항은 상담 시 안내드립니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2 class="reveal">지금 신청하면<br><span>무료 상담</span>을 드립니다</h2>
+  <p class="reveal">
+    합격한 학생들이 선택한 커리큘럼을 직접 확인하세요<br>
+    상담 후 등록 여부를 결정하셔도 됩니다
+  </p>
+  <div class="final-btns">
+    <button class="btn-main reveal" onclick="document.getElementById('consult').scrollIntoView({behavior:'smooth'})">📋 무료 상담 신청하기</button>
+    <button class="btn-sub reveal" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">💬 카카오로 문의</button>
+  </div>
+</section>
+
+<footer>
+  <!-- ✅ 실제 정보로 교체 -->
+  ○○학원 · 학원등록번호 제0000호 · 대표 홍길동<br>
+  서울시 ○○구 ○○로 000 · Tel. 010-0000-0000<br>
+  © 2025 ○○학원. All rights reserved.
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+function submitForm() {
+  // ✅ 실제 폼 제출 로직 또는 카카오 채널 연결로 교체
+  alert('상담 신청이 완료되었습니다!\n24시간 내에 연락드리겠습니다.');
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>○○공인중개사 | 믿을 수 있는 부동산 상담</title>
+<meta name="description" content="20년 경력 공인중개사가 직접 상담합니다. 지금 무료 상담 신청하세요.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --teal: #2DD4BF;
+  --teal2: #14B8A6;
+  --teal-light: rgba(45,212,191,0.10);
+  --teal-border: rgba(45,212,191,0.28);
+  --bg: #080C0B;
+  --surface: #0D1614;
+  --surface2: #131E1C;
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.15);
+  --text: #F0FFFE;
+  --muted: rgba(240,255,254,0.50);
+  --muted2: rgba(240,255,254,0.28);
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+
+/* FLOATING */
+.float-cta {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 999; display: flex; gap: 10px;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+}
+.float-btn {
+  font-family: 'Noto Sans KR', sans-serif; font-size: 15px; font-weight: 700;
+  padding: 14px 26px; border-radius: 100px; border: none;
+  cursor: pointer; white-space: nowrap; transition: transform 0.15s, opacity 0.15s;
+}
+.float-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+.float-btn.kakao { background: #FEE500; color: #1A1A1A; }
+.float-btn.call  { background: var(--teal); color: #080C0B; }
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100; height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; background: rgba(8,12,11,0.90);
+  backdrop-filter: blur(12px); border-bottom: 0.5px solid var(--border);
+}
+.nav-logo { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+.nav-logo span { color: var(--teal); }
+.nav-cta {
+  background: var(--teal); color: #080C0B;
+  font-size: 13px; font-weight: 700; padding: 9px 20px; border-radius: 100px;
+}
+.nav-cta:hover { opacity: 0.88; }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 80px 24px 60px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; bottom: -150px; left: 50%;
+  transform: translateX(-50%); width: 700px; height: 550px;
+  background: radial-gradient(circle, rgba(45,212,191,0.12) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--teal-light); border: 0.5px solid var(--teal-border);
+  color: var(--teal); font-size: 12px; font-weight: 600;
+  padding: 7px 18px; border-radius: 100px; margin-bottom: 28px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--teal); animation: blink 1.6s infinite;
+}
+.hero h1 {
+  font-size: clamp(34px, 8vw, 68px); font-weight: 900;
+  line-height: 1.1; letter-spacing: -0.035em; margin-bottom: 20px;
+  animation: fadeUp 0.6s 0.08s ease both;
+}
+.hero h1 .accent { color: var(--teal); }
+.hero p {
+  font-size: clamp(15px, 2.5vw, 19px); color: var(--muted); line-height: 1.75;
+  margin-bottom: 44px; animation: fadeUp 0.6s 0.14s ease both;
+}
+.hero p strong { color: var(--text); font-weight: 500; }
+.hero-btns {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.btn-main {
+  background: var(--teal); color: #080C0B;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 16px; font-weight: 700;
+  padding: 17px 36px; border-radius: 100px; border: none;
+  cursor: pointer; transition: opacity 0.15s, transform 0.15s;
+  box-shadow: 0 8px 32px rgba(45,212,191,0.3);
+}
+.btn-main:hover { opacity: 0.9; transform: translateY(-2px); }
+.btn-sub {
+  background: rgba(255,255,255,0.07); border: 0.5px solid var(--border-hover);
+  color: var(--muted); font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px; font-weight: 500; padding: 17px 36px; border-radius: 100px;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-sub:hover { background: rgba(255,255,255,0.12); color: var(--text); }
+.trust-bar {
+  display: flex; gap: 28px; flex-wrap: wrap; justify-content: center;
+  margin-top: 56px; padding-top: 36px; border-top: 0.5px solid var(--border);
+  animation: fadeUp 0.6s 0.26s ease both;
+}
+.trust-item { text-align: center; }
+.trust-num { font-size: 28px; font-weight: 900; color: var(--teal); letter-spacing: -0.04em; line-height: 1; }
+.trust-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* SECTION */
+.section { max-width: 700px; margin: 0 auto; padding: 80px 24px; }
+.sec-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; color: var(--teal); text-transform: uppercase; margin-bottom: 12px; }
+.sec-title { font-size: clamp(24px, 4.5vw, 36px); font-weight: 900; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 14px; }
+.sec-desc { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 40px; }
+
+/* PROPERTY CARDS */
+.property-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.property-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.property-card:hover { border-color: var(--teal-border); transform: translateY(-3px); }
+.property-img {
+  width: 100%; aspect-ratio: 4/3;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px; position: relative;
+}
+.property-tag {
+  position: absolute; top: 10px; left: 10px;
+  font-size: 11px; font-weight: 700;
+  padding: 4px 10px; border-radius: 100px;
+}
+.tag-sale { background: var(--teal); color: #080C0B; }
+.tag-rent { background: rgba(255,200,50,0.9); color: #1A1A1A; }
+.tag-new  { background: rgba(255,80,60,0.9); color: #fff; }
+.property-body { padding: 16px 18px; }
+.property-type { font-size: 11px; color: var(--teal); font-weight: 600; margin-bottom: 5px; }
+.property-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.01em; }
+.property-addr { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.property-price { font-size: 20px; font-weight: 900; color: var(--teal); letter-spacing: -0.03em; margin-bottom: 2px; }
+.property-detail { font-size: 12px; color: var(--muted); }
+.property-specs {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;
+  padding-top: 12px; border-top: 0.5px solid var(--border);
+}
+.spec-item { font-size: 11px; color: var(--muted); }
+.spec-item::after { content: '·'; margin-left: 8px; }
+.spec-item:last-child::after { content: ''; }
+
+/* AGENT CARD */
+.agent-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 20px; padding: 32px; display: flex; gap: 28px; align-items: flex-start;
+}
+.agent-avatar {
+  flex-shrink: 0; width: 88px; height: 88px; border-radius: 50%;
+  background: var(--teal-light); border: 2px solid var(--teal-border);
+  display: flex; align-items: center; justify-content: center; font-size: 36px;
+}
+.agent-info { flex: 1; }
+.agent-name { font-size: 22px; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 4px; }
+.agent-title { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+.agent-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.a-badge {
+  font-size: 11px; font-weight: 600;
+  background: var(--teal-light); border: 0.5px solid var(--teal-border);
+  color: var(--teal); padding: 4px 12px; border-radius: 100px;
+}
+.agent-career { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.ac-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: rgba(240,255,254,0.72); line-height: 1.5; }
+.ac-dot { flex-shrink: 0; width: 5px; height: 5px; border-radius: 50%; background: var(--teal); margin-top: 6px; }
+
+/* PROCESS */
+.process-list { display: flex; flex-direction: column; gap: 0; position: relative; }
+.process-list::before {
+  content: ''; position: absolute; left: 22px; top: 0; bottom: 0;
+  width: 0.5px; background: linear-gradient(to bottom, var(--teal), rgba(45,212,191,0.1));
+}
+.process-item { display: flex; gap: 20px; padding-bottom: 28px; }
+.process-item:last-child { padding-bottom: 0; }
+.proc-num {
+  flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--teal); color: #080C0B; font-size: 15px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;
+}
+.proc-content { padding-top: 7px; }
+.proc-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.proc-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* REVIEW */
+.review-list { display: flex; flex-direction: column; gap: 14px; }
+.review-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 22px; display: flex; gap: 16px;
+  transition: border-color 0.2s;
+}
+.review-card:hover { border-color: var(--teal-border); }
+.r-avatar {
+  flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%;
+  background: var(--teal-light); border: 0.5px solid var(--teal-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: var(--teal);
+}
+.r-body { flex: 1; }
+.r-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.r-name { font-size: 14px; font-weight: 700; }
+.r-stars { color: var(--teal); font-size: 13px; }
+.r-tag { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.r-text { font-size: 13px; color: rgba(240,255,254,0.72); line-height: 1.75; }
+
+/* FAQ */
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+.faq-item { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+.faq-q {
+  width: 100%; text-align: left; display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px; font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 600;
+  background: none; border: none; cursor: pointer; color: var(--text); transition: background 0.15s;
+}
+.faq-q:hover { background: rgba(255,255,255,0.03); }
+.faq-icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--teal-light); border: 0.5px solid var(--teal-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--teal); transition: transform 0.25s; flex-shrink: 0;
+}
+.faq-a { display: none; padding: 14px 20px 18px; font-size: 13px; color: var(--muted); line-height: 1.8; border-top: 0.5px solid var(--border); }
+.faq-item.open .faq-a { display: block; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+
+/* FINAL CTA */
+.final-cta {
+  background: var(--surface); border-top: 0.5px solid var(--border);
+  padding: 88px 24px; text-align: center; position: relative; overflow: hidden;
+}
+.final-cta::before {
+  content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 500px;
+  background: radial-gradient(circle, rgba(45,212,191,0.10) 0%, transparent 65%);
+  pointer-events: none;
+}
+.final-cta h2 { font-size: clamp(26px, 5vw, 44px); font-weight: 900; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 14px; position: relative; }
+.final-cta h2 span { color: var(--teal); }
+.final-cta p { font-size: 15px; color: var(--muted); line-height: 1.75; margin-bottom: 40px; position: relative; }
+.final-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+.divider { height: 0.5px; background: var(--border); }
+footer { padding: 28px 24px; text-align: center; border-top: 0.5px solid var(--border); font-size: 12px; color: var(--muted2); line-height: 1.8; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 560px) {
+  .property-grid { grid-template-columns: 1fr; }
+  .agent-card { flex-direction: column; align-items: center; text-align: center; }
+  .float-cta { width: calc(100% - 32px); }
+  .float-btn { flex: 1; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="float-cta">
+  <button class="float-btn kakao" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">💬 카카오 상담</button>
+  <button class="float-btn call" onclick="window.location.href='tel:010-0000-0000'">📞 즉시 전화</button>
+</div>
+
+<nav>
+  <div class="nav-logo">○○<span>부동산</span></div>
+  <a href="#consult" class="nav-cta">무료 상담 신청 →</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">🏠 20년 경력 공인중개사 직접 상담</div>
+  <h1>좋은 매물은<br><span class="accent">발품보다<br>신뢰</span>입니다</h1>
+  <p><strong>숨겨진 매물</strong>까지 직접 발굴해 드립니다.<br>계약까지 처음부터 끝까지 책임집니다.</p>
+  <div class="hero-btns">
+    <button class="btn-main" onclick="document.getElementById('properties').scrollIntoView({behavior:'smooth'})">🏠 매물 보러가기</button>
+    <button class="btn-sub" onclick="document.getElementById('consult').scrollIntoView({behavior:'smooth'})">무료 상담 신청</button>
+  </div>
+  <div class="trust-bar">
+    <div class="trust-item"><div class="trust-num">20년</div><div class="trust-label">공인중개사 경력</div></div>
+    <div class="trust-item"><div class="trust-num">2,800+</div><div class="trust-label">거래 완료 건수</div></div>
+    <div class="trust-item"><div class="trust-num">4.9점</div><div class="trust-label">네이버 리뷰</div></div>
+    <div class="trust-item"><div class="trust-num">100%</div><div class="trust-label">직접 책임 상담</div></div>
+  </div>
+</section>
+
+<!-- PROPERTIES -->
+<section class="section" id="properties">
+  <p class="sec-label reveal">추천 매물</p>
+  <h2 class="sec-title reveal">지금 바로 상담 가능한<br>추천 매물입니다</h2>
+  <p class="sec-desc reveal">직접 발품 팔아 검증한 매물만 올립니다. 허위 매물 없습니다.</p>
+
+  <div class="property-grid">
+    <div class="property-card reveal">
+      <div class="property-img">🏢<span class="property-tag tag-sale">매매</span></div>
+      <div class="property-body">
+        <div class="property-type">아파트</div>
+        <div class="property-name">○○파크 ○○동</div>
+        <div class="property-addr">📍 서울시 ○○구 ○○동</div>
+        <div class="property-price">6억 5,000</div>
+        <div class="property-detail">84㎡ · 고층 · 남향</div>
+        <div class="property-specs">
+          <span class="spec-item">방 3개</span>
+          <span class="spec-item">욕실 2개</span>
+          <span class="spec-item">주차 1대</span>
+        </div>
+      </div>
+    </div>
+    <div class="property-card reveal">
+      <div class="property-img">🏠<span class="property-tag tag-new">신규</span></div>
+      <div class="property-body">
+        <div class="property-type">빌라</div>
+        <div class="property-name">○○빌 신축</div>
+        <div class="property-addr">📍 서울시 ○○구 ○○동</div>
+        <div class="property-price">보증 3억/월 80</div>
+        <div class="property-detail">59㎡ · 2층 · 동향</div>
+        <div class="property-specs">
+          <span class="spec-item">방 2개</span>
+          <span class="spec-item">욕실 1개</span>
+          <span class="spec-item">풀옵션</span>
+        </div>
+      </div>
+    </div>
+    <div class="property-card reveal">
+      <div class="property-img">🏬<span class="property-tag tag-rent">전세</span></div>
+      <div class="property-body">
+        <div class="property-type">오피스텔</div>
+        <div class="property-name">○○스퀘어</div>
+        <div class="property-addr">📍 서울시 ○○구 ○○동</div>
+        <div class="property-price">전세 2억 2,000</div>
+        <div class="property-detail">33㎡ · 역세권 5분</div>
+        <div class="property-specs">
+          <span class="spec-item">방 1개</span>
+          <span class="spec-item">욕실 1개</span>
+          <span class="spec-item">풀옵션</span>
+        </div>
+      </div>
+    </div>
+    <div class="property-card reveal">
+      <div class="property-img">🏡<span class="property-tag tag-sale">매매</span></div>
+      <div class="property-body">
+        <div class="property-type">단독주택</div>
+        <div class="property-name">○○동 단독</div>
+        <div class="property-addr">📍 경기도 ○○시 ○○동</div>
+        <div class="property-price">3억 8,000</div>
+        <div class="property-detail">대지 80평 · 건물 40평</div>
+        <div class="property-specs">
+          <span class="spec-item">방 4개</span>
+          <span class="spec-item">욕실 2개</span>
+          <span class="spec-item">주차 2대</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- AGENT -->
+<section class="section">
+  <p class="sec-label reveal">공인중개사 소개</p>
+  <h2 class="sec-title reveal">20년 경력 중개사가<br>직접 책임집니다</h2>
+
+  <div class="agent-card reveal">
+    <div class="agent-avatar">🧑‍💼</div>
+    <div class="agent-info">
+      <div class="agent-name">홍○○ 공인중개사</div>
+      <div class="agent-title">공인중개사 자격 · 경력 20년</div>
+      <div class="agent-badges">
+        <span class="a-badge">공인중개사 자격증</span>
+        <span class="a-badge">네이버 인증 중개사</span>
+        <span class="a-badge">거래 2,800건+</span>
+      </div>
+      <ul class="agent-career">
+        <li class="ac-item"><span class="ac-dot"></span>○○공인중개사 대표 · 현재</li>
+        <li class="ac-item"><span class="ac-dot"></span>○○부동산 수석 중개사 · 10년</li>
+        <li class="ac-item"><span class="ac-dot"></span>한국공인중개사협회 정회원</li>
+        <li class="ac-item"><span class="ac-dot"></span>네이버 부동산 인증 우수 중개사 3년 연속</li>
+        <li class="ac-item"><span class="ac-dot"></span>아파트·빌라·상가·토지 전 분야 전문</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROCESS -->
+<section class="section">
+  <p class="sec-label reveal">상담 절차</p>
+  <h2 class="sec-title reveal">상담 신청부터<br>계약까지 함께합니다</h2>
+
+  <div class="process-list">
+    <div class="process-item reveal">
+      <div class="proc-num">1</div>
+      <div class="proc-content">
+        <div class="proc-title">카카오 또는 전화 무료 상담</div>
+        <p class="proc-desc">원하는 조건·예산·지역을 말씀해 주시면 맞춤 매물을 찾아드립니다.</p>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="proc-num">2</div>
+      <div class="proc-content">
+        <div class="proc-title">맞춤 매물 선별 제공</div>
+        <p class="proc-desc">허위 매물 없이 검증된 매물만 제안드립니다. 숨겨진 매물까지 직접 발굴합니다.</p>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="proc-num">3</div>
+      <div class="proc-content">
+        <div class="proc-title">현장 동행 방문</div>
+        <p class="proc-desc">중개사가 직접 동행해 실제 상태·주변 환경을 꼼꼼히 확인해 드립니다.</p>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="proc-num">4</div>
+      <div class="proc-content">
+        <div class="proc-title">가격 협상 및 계약 진행</div>
+        <p class="proc-desc">최선의 가격으로 협상하고 계약서 검토·특약 사항까지 책임지고 도와드립니다.</p>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="proc-num">5</div>
+      <div class="proc-content">
+        <div class="proc-title">잔금·입주 사후 관리</div>
+        <p class="proc-desc">계약 후에도 잔금·등기·입주까지 끝까지 함께합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REVIEWS -->
+<section class="section">
+  <p class="sec-label reveal">거래 후기</p>
+  <h2 class="sec-title reveal">직접 거래하신 분들의<br>솔직한 이야기</h2>
+
+  <div class="review-list">
+    <div class="review-card reveal">
+      <div class="r-avatar">김</div>
+      <div class="r-body">
+        <div class="r-header"><div class="r-name">김○○ 님</div><div class="r-stars">★★★★★</div></div>
+        <div class="r-tag">30대 부부 · 아파트 매매</div>
+        <p class="r-text">처음 집을 사는 거라 너무 걱정됐는데 모든 과정을 옆에서 설명해 주셔서 안심하고 진행할 수 있었어요. 가격 협상도 생각보다 많이 낮춰주셔서 정말 감사합니다.</p>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="r-avatar">이</div>
+      <div class="r-body">
+        <div class="r-header"><div class="r-name">이○○ 님</div><div class="r-stars">★★★★★</div></div>
+        <div class="r-tag">40대 · 빌라 전세</div>
+        <p class="r-text">전세 사기가 무서워서 신중하게 골랐는데 등기부터 건축물대장까지 다 확인해 주시고 안전한 매물만 보여주셔서 믿음이 갔어요. 계약 후에도 연락이 잘 돼서 좋았습니다.</p>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="r-avatar">박</div>
+      <div class="r-body">
+        <div class="r-header"><div class="r-name">박○○ 님</div><div class="r-stars">★★★★★</div></div>
+        <div class="r-tag">50대 · 상가 투자</div>
+        <p class="r-text">투자 목적으로 상가를 알아보고 있었는데 수익률 계산부터 임차인 현황까지 꼼꼼히 분석해 주셔서 좋은 결정을 할 수 있었습니다. 앞으로도 계속 이용할 예정입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section class="section">
+  <p class="sec-label reveal">자주 묻는 질문</p>
+  <h2 class="sec-title reveal">궁금한 점이 있으신가요?</h2>
+
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">중개 수수료는 얼마인가요?<span class="faq-icon">+</span></button>
+      <div class="faq-a">법정 중개보수 기준에 따라 투명하게 청구합니다. 상담 시 거래 금액에 따른 수수료를 미리 안내해 드립니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">전세 사기 걱정이 있는데 안전한가요?<span class="faq-icon">+</span></button>
+      <div class="faq-a">등기부등본·건축물대장·확정일자·전입신고 등 안전 거래를 위한 모든 서류를 꼼꼼히 확인합니다. 문제 소지가 있는 매물은 처음부터 배제합니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">원하는 지역 매물이 없으면 어떻게 하나요?<span class="faq-icon">+</span></button>
+      <div class="faq-a">원하는 조건을 말씀해 주시면 네트워크를 통해 미공개 매물까지 직접 발굴해 드립니다. 조건에 맞는 매물이 나오면 바로 연락드립니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">계약 전 법률 검토가 가능한가요?<span class="faq-icon">+</span></button>
+      <div class="faq-a">계약서 특약 사항 검토 및 분쟁 예방을 위한 조언을 드립니다. 필요시 제휴 법무사·변호사와 연결도 도와드립니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="consult">
+  <h2 class="reveal">지금 바로<br><span>무료 상담</span> 신청하세요</h2>
+  <p class="reveal">원하는 조건을 말씀해 주시면<br>숨겨진 매물까지 직접 찾아드립니다</p>
+  <div class="final-btns">
+    <button class="btn-main reveal" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">💬 카카오로 상담 신청</button>
+    <button class="btn-sub reveal" onclick="window.location.href='tel:010-0000-0000'">📞 즉시 전화 상담</button>
+  </div>
+</section>
+
+<footer>
+  ○○공인중개사 · 공인중개사 등록번호 제0000호 · 대표 홍○○<br>
+  서울시 ○○구 ○○로 000 · Tel. 010-0000-0000<br>
+  © 2025 ○○공인중개사. All rights reserved.
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

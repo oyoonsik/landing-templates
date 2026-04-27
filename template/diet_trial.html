@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>○○ 다이어트 | 체험단 모집 · 무료 상담</title>
+<meta name="description" content="한정 체험단 모집 중. 지금 신청하면 무료로 시작할 수 있습니다.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #3DD68C;
+  --green2: #2BBF79;
+  --green-light: rgba(61,214,140,0.10);
+  --green-border: rgba(61,214,140,0.25);
+  --bg: #080F0A;
+  --surface: #0E1A10;
+  --surface2: #162118;
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.15);
+  --text: #F0FFF4;
+  --muted: rgba(240,255,244,0.50);
+  --muted2: rgba(240,255,244,0.28);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+
+/* ── FLOATING ── */
+.float-cta {
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex; gap: 10px;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4));
+}
+.float-btn {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px; font-weight: 700;
+  padding: 14px 26px; border-radius: 100px; border: none;
+  cursor: pointer; white-space: nowrap;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.float-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+.float-btn.kakao { background: #FEE500; color: #1A1A1A; }
+.float-btn.call  { background: var(--green); color: #0A1A0C; }
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(8,15,10,0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+}
+.nav-logo { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+.nav-logo span { color: var(--green); }
+.nav-cta {
+  background: var(--green); color: #0A1A0C;
+  font-size: 13px; font-weight: 700;
+  padding: 9px 20px; border-radius: 100px;
+  transition: opacity 0.15s;
+}
+.nav-cta:hover { opacity: 0.88; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 80px 24px 60px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -150px; left: 50%;
+  transform: translateX(-50%);
+  width: 700px; height: 600px;
+  background: radial-gradient(circle, rgba(61,214,140,0.12) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.countdown-wrap {
+  display: flex; gap: 8px; margin-bottom: 32px;
+  animation: fadeUp 0.6s ease both;
+}
+.cd-box {
+  background: var(--surface);
+  border: 0.5px solid var(--green-border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  text-align: center;
+  min-width: 62px;
+}
+.cd-num {
+  font-size: 26px; font-weight: 900;
+  color: var(--green); letter-spacing: -0.04em;
+  line-height: 1;
+}
+.cd-label { font-size: 10px; color: var(--muted); margin-top: 4px; letter-spacing: 0.04em; }
+.cd-sep { font-size: 24px; font-weight: 900; color: var(--green); align-self: center; opacity: 0.5; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(61,214,140,0.1);
+  border: 0.5px solid var(--green-border);
+  color: var(--green);
+  font-size: 12px; font-weight: 600;
+  padding: 7px 18px; border-radius: 100px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s 0.06s ease both;
+}
+.hero-badge::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--green);
+  animation: blink 1.6s infinite;
+}
+
+.hero h1 {
+  font-size: clamp(34px, 8vw, 68px);
+  font-weight: 900;
+  line-height: 1.1; letter-spacing: -0.035em;
+  margin-bottom: 20px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero h1 .accent { color: var(--green); }
+
+.hero p {
+  font-size: clamp(15px, 2.5vw, 19px);
+  color: var(--muted); line-height: 1.75;
+  margin-bottom: 44px;
+  animation: fadeUp 0.6s 0.16s ease both;
+}
+.hero p strong { color: var(--text); font-weight: 500; }
+
+.hero-btns {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.22s ease both;
+}
+.btn-main {
+  background: var(--green); color: #0A1A0C;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px; font-weight: 700;
+  padding: 17px 36px; border-radius: 100px; border: none;
+  cursor: pointer; transition: opacity 0.15s, transform 0.15s;
+}
+.btn-main:hover { opacity: 0.88; transform: translateY(-2px); }
+.btn-sub {
+  background: rgba(255,255,255,0.07);
+  border: 0.5px solid var(--border-hover);
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px; font-weight: 500;
+  padding: 17px 36px; border-radius: 100px;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-sub:hover { background: rgba(255,255,255,0.12); color: var(--text); }
+
+.spots-bar {
+  margin-top: 52px;
+  animation: fadeUp 0.6s 0.28s ease both;
+}
+.spots-label { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+.progress-wrap {
+  width: 280px; height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 100px; overflow: hidden;
+  margin: 0 auto 8px;
+}
+.progress-bar {
+  height: 100%; width: 73%;
+  background: linear-gradient(90deg, var(--green2), var(--green));
+  border-radius: 100px;
+  animation: grow 1.2s 0.5s ease both;
+}
+.spots-count { font-size: 12px; color: var(--green); font-weight: 600; }
+
+/* ── SECTION ── */
+.section {
+  max-width: 680px; margin: 0 auto;
+  padding: 80px 24px;
+}
+.sec-label {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; color: var(--green);
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.sec-title {
+  font-size: clamp(24px, 4.5vw, 36px);
+  font-weight: 900; letter-spacing: -0.03em;
+  line-height: 1.2; margin-bottom: 14px;
+}
+.sec-desc {
+  font-size: 15px; color: var(--muted);
+  line-height: 1.8; margin-bottom: 40px;
+}
+
+/* ── BEFORE/AFTER ── */
+.ba-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.ba-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  transition: border-color 0.2s;
+}
+.ba-card:hover { border-color: var(--green-border); }
+.ba-img {
+  width: 100%; aspect-ratio: 3/4;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px;
+  background: var(--surface2);
+  position: relative;
+}
+.ba-tag {
+  position: absolute; top: 10px; left: 10px;
+  font-size: 11px; font-weight: 700;
+  padding: 4px 10px; border-radius: 100px;
+}
+.ba-tag.before { background: rgba(255,255,255,0.12); color: var(--muted); }
+.ba-tag.after  { background: var(--green); color: #0A1A0C; }
+.ba-info { padding: 16px; }
+.ba-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.ba-result { font-size: 13px; color: var(--green); font-weight: 600; }
+.ba-period { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ── REVIEW CARDS ── */
+.review-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+.review-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 20px;
+  transition: border-color 0.2s;
+}
+.review-card:hover { border-color: var(--green-border); }
+.review-stars { color: var(--green); font-size: 13px; margin-bottom: 10px; }
+.review-text {
+  font-size: 13px; color: rgba(240,255,244,0.72);
+  line-height: 1.75; margin-bottom: 14px;
+}
+.review-author { display: flex; align-items: center; gap: 8px; }
+.r-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--green-light);
+  border: 0.5px solid var(--green-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--green);
+}
+.r-name { font-size: 12px; font-weight: 600; }
+.r-tag  { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+/* ── STATS ── */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 24px 20px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.stat-card:hover { border-color: var(--green-border); transform: translateY(-2px); }
+.stat-num {
+  font-size: 36px; font-weight: 900;
+  color: var(--green); letter-spacing: -0.04em;
+  line-height: 1; margin-bottom: 6px;
+}
+.stat-label { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* ── PROGRAM ── */
+.program-list {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.program-item {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 20px 22px;
+  display: flex; align-items: flex-start; gap: 16px;
+  transition: border-color 0.2s;
+}
+.program-item:hover { border-color: var(--green-border); }
+.prog-icon {
+  flex-shrink: 0; width: 40px; height: 40px;
+  border-radius: 10px;
+  background: var(--green-light);
+  border: 0.5px solid var(--green-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.prog-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.prog-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* ── PRICING ── */
+.price-cards {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+.price-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 16px; padding: 28px 22px;
+  position: relative; transition: border-color 0.2s;
+}
+.price-card.featured {
+  border-color: var(--green-border);
+  background: rgba(61,214,140,0.05);
+}
+.price-badge {
+  position: absolute; top: -12px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--green); color: #0A1A0C;
+  font-size: 11px; font-weight: 700;
+  padding: 4px 14px; border-radius: 100px;
+  white-space: nowrap;
+}
+.price-name { font-size: 14px; font-weight: 600; color: var(--muted); margin-bottom: 10px; }
+.price-num {
+  font-size: 32px; font-weight: 900;
+  letter-spacing: -0.04em; line-height: 1;
+  margin-bottom: 6px;
+}
+.price-num .won { font-size: 18px; }
+.price-num .origin {
+  font-size: 14px; color: var(--muted);
+  text-decoration: line-through; font-weight: 400;
+  margin-left: 4px;
+}
+.price-period { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+.price-features { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.price-feat {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: rgba(240,255,244,0.75);
+}
+.pf-check { color: var(--green); font-size: 13px; flex-shrink: 0; }
+
+/* ── FAQ ── */
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+.faq-item {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.faq-q {
+  width: 100%; text-align: left;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 600;
+  background: none; border: none; cursor: pointer;
+  color: var(--text); transition: background 0.15s;
+}
+.faq-q:hover { background: rgba(255,255,255,0.03); }
+.faq-icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--green-light);
+  border: 0.5px solid var(--green-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--green);
+  transition: transform 0.25s; flex-shrink: 0;
+}
+.faq-a {
+  display: none; padding: 0 20px 18px;
+  font-size: 13px; color: var(--muted); line-height: 1.8;
+  border-top: 0.5px solid var(--border); padding-top: 14px;
+}
+.faq-item.open .faq-a { display: block; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+
+/* ── FINAL CTA ── */
+.final-cta {
+  background: var(--surface);
+  border-top: 0.5px solid var(--border);
+  padding: 80px 24px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.final-cta::before {
+  content: '';
+  position: absolute; top: -100px; left: 50%;
+  transform: translateX(-50%);
+  width: 500px; height: 400px;
+  background: radial-gradient(circle, rgba(61,214,140,0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+.final-cta h2 {
+  font-size: clamp(26px, 5vw, 42px);
+  font-weight: 900; letter-spacing: -0.03em;
+  line-height: 1.2; margin-bottom: 14px;
+  position: relative;
+}
+.final-cta h2 span { color: var(--green); }
+.final-cta p {
+  font-size: 15px; color: var(--muted);
+  line-height: 1.75; margin-bottom: 40px;
+  position: relative;
+}
+.final-btns {
+  display: flex; gap: 12px; justify-content: center;
+  flex-wrap: wrap; position: relative;
+}
+
+/* ── DIVIDER ── */
+.divider { height: 0.5px; background: var(--border); }
+
+/* ── FOOTER ── */
+footer {
+  padding: 28px 24px; text-align: center;
+  border-top: 0.5px solid var(--border);
+  font-size: 12px; color: var(--muted2);
+  line-height: 1.8;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+}
+@keyframes grow {
+  from { width: 0; } to { width: 73%; }
+}
+.reveal {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 560px) {
+  .ba-grid, .review-grid, .stats-grid, .price-cards { grid-template-columns: 1fr; }
+  .float-cta { width: calc(100% - 32px); }
+  .float-btn { flex: 1; justify-content: center; }
+  .countdown-wrap { gap: 5px; }
+  .cd-box { min-width: 52px; padding: 10px 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- FLOATING -->
+<div class="float-cta">
+  <button class="float-btn kakao" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">💬 카카오 신청</button>
+  <button class="float-btn call" onclick="window.location.href='tel:010-0000-0000'">📞 전화 신청</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">○○<span>다이어트</span></div>
+  <a href="#apply" class="nav-cta">체험단 신청 →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <!-- 카운트다운 -->
+  <div class="countdown-wrap">
+    <div class="cd-box">
+      <div class="cd-num" id="cd-day">03</div>
+      <div class="cd-label">DAY</div>
+    </div>
+    <div class="cd-sep">:</div>
+    <div class="cd-box">
+      <div class="cd-num" id="cd-hour">14</div>
+      <div class="cd-label">HOUR</div>
+    </div>
+    <div class="cd-sep">:</div>
+    <div class="cd-box">
+      <div class="cd-num" id="cd-min">22</div>
+      <div class="cd-label">MIN</div>
+    </div>
+    <div class="cd-sep">:</div>
+    <div class="cd-box">
+      <div class="cd-num" id="cd-sec">09</div>
+      <div class="cd-label">SEC</div>
+    </div>
+  </div>
+
+  <div class="hero-badge">🔥 이번 달 체험단 마감 임박</div>
+
+  <h1>
+    한 달 만에<br>
+    <span class="accent">-7kg 가능</span>한<br>
+    체험단 모집
+  </h1>
+  <p>
+    지금 신청하면 <strong>첫 달 무료</strong>로 시작.<br>
+    체험 후 만족 못 하시면 <strong>100% 환불</strong>합니다.
+  </p>
+  <div class="hero-btns">
+    <button class="btn-main" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">🎯 무료 체험단 신청하기</button>
+    <button class="btn-sub" onclick="document.getElementById('reviews').scrollIntoView({behavior:'smooth'})">후기 먼저 보기</button>
+  </div>
+
+  <div class="spots-bar">
+    <p class="spots-label">이번 달 체험단 모집 현황</p>
+    <div class="progress-wrap">
+      <div class="progress-bar"></div>
+    </div>
+    <!-- ✅ 실제 숫자로 교체 -->
+    <p class="spots-count">⚡ 30명 중 22명 신청 완료 · 잔여 8자리</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section">
+  <p class="sec-label reveal">숫자로 증명</p>
+  <h2 class="sec-title reveal">믿을 수 있는<br>실제 결과입니다</h2>
+
+  <div class="stats-grid">
+    <div class="stat-card reveal">
+      <div class="stat-num">2,400+</div>
+      <div class="stat-label">누적 체험단<br>참여 인원</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-num">-6.8kg</div>
+      <div class="stat-label">1개월 평균<br>감량 수치</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-num">94%</div>
+      <div class="stat-label">만족도<br>(체험단 설문 기준)</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">불만족 시<br>환불 보장</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BEFORE / AFTER -->
+<section class="section" id="reviews">
+  <p class="sec-label reveal">체험단 후기</p>
+  <h2 class="sec-title reveal">직접 해보신 분들의<br>솔직한 변화</h2>
+  <p class="sec-desc reveal">과장 없이, 실제 체험단 참여자들의 비포·애프터입니다</p>
+
+  <div class="ba-grid">
+    <div class="ba-card reveal">
+      <div class="ba-img">
+        <!-- ✅ 실제 사진으로 교체 -->
+        🧍
+        <span class="ba-tag before">BEFORE</span>
+      </div>
+      <div class="ba-info">
+        <div class="ba-name">김○○ 님 (32세)</div>
+        <div class="ba-result">-8.2kg 감량</div>
+        <div class="ba-period">4주 프로그램 완료</div>
+      </div>
+    </div>
+    <div class="ba-card reveal">
+      <div class="ba-img" style="background:rgba(61,214,140,0.06);">
+        🏃
+        <span class="ba-tag after">AFTER</span>
+      </div>
+      <div class="ba-info">
+        <div class="ba-name">김○○ 님 (32세)</div>
+        <div class="ba-result" style="color:#3DD68C">✓ 목표 달성!</div>
+        <div class="ba-period">현재 유지 중</div>
+      </div>
+    </div>
+    <div class="ba-card reveal">
+      <div class="ba-img">
+        🧍‍♀️
+        <span class="ba-tag before">BEFORE</span>
+      </div>
+      <div class="ba-info">
+        <div class="ba-name">박○○ 님 (28세)</div>
+        <div class="ba-result">-6.5kg 감량</div>
+        <div class="ba-period">4주 프로그램 완료</div>
+      </div>
+    </div>
+    <div class="ba-card reveal">
+      <div class="ba-img" style="background:rgba(61,214,140,0.06);">
+        🏋️‍♀️
+        <span class="ba-tag after">AFTER</span>
+      </div>
+      <div class="ba-info">
+        <div class="ba-name">박○○ 님 (28세)</div>
+        <div class="ba-result" style="color:#3DD68C">✓ 목표 달성!</div>
+        <div class="ba-period">현재 유지 중</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REVIEWS -->
+<section class="section">
+  <p class="sec-label reveal">참여자 후기</p>
+  <h2 class="sec-title reveal">체험단이 직접 남긴<br>솔직한 이야기</h2>
+
+  <div class="review-grid">
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">처음엔 반신반의했는데 진짜로 빠지더라고요. 굶지 않고도 이렇게 빠질 수 있다는 게 신기했어요.</p>
+      <div class="review-author">
+        <div class="r-avatar">김</div>
+        <div>
+          <div class="r-name">김○○ 님</div>
+          <div class="r-tag">30대 직장인 · -8kg</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">담당 선생님이 매일 체크해주셔서 혼자 하는 것보다 훨씬 동기부여가 됐어요. 강력 추천합니다!</p>
+      <div class="review-author">
+        <div class="r-avatar">이</div>
+        <div>
+          <div class="r-name">이○○ 님</div>
+          <div class="r-tag">20대 주부 · -6kg</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">요요가 제일 걱정이었는데 관리법까지 알려주셔서 지금도 유지하고 있어요. 너무 만족해요.</p>
+      <div class="review-author">
+        <div class="r-avatar">박</div>
+        <div>
+          <div class="r-name">박○○ 님</div>
+          <div class="r-tag">40대 · -7.3kg</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">식단이 너무 빡세면 어쩌나 했는데 현실적으로 짜줘서 실천하기 좋았어요. 다음 달도 할 예정이에요.</p>
+      <div class="review-author">
+        <div class="r-avatar">최</div>
+        <div>
+          <div class="r-name">최○○ 님</div>
+          <div class="r-tag">30대 · -5.8kg</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROGRAM -->
+<section class="section">
+  <p class="sec-label reveal">프로그램 구성</p>
+  <h2 class="sec-title reveal">체험단에 포함된<br>모든 것</h2>
+
+  <div class="program-list">
+    <div class="program-item reveal">
+      <div class="prog-icon">📋</div>
+      <div>
+        <div class="prog-title">맞춤 식단 플랜</div>
+        <p class="prog-desc">체형·생활습관에 맞는 1:1 식단 설계. 굶지 않아도 빠지는 식단 구성.</p>
+      </div>
+    </div>
+    <div class="program-item reveal">
+      <div class="prog-icon">💬</div>
+      <div>
+        <div class="prog-title">담당 매니저 1:1 케어</div>
+        <p class="prog-desc">카카오톡으로 매일 체크인. 흔들릴 때 바로 잡아드립니다.</p>
+      </div>
+    </div>
+    <div class="program-item reveal">
+      <div class="prog-icon">🏋️</div>
+      <div>
+        <div class="prog-title">맞춤 운동 루틴</div>
+        <p class="prog-desc">헬스장 없어도 OK. 집에서 할 수 있는 루틴으로 구성.</p>
+      </div>
+    </div>
+    <div class="program-item reveal">
+      <div class="prog-icon">📊</div>
+      <div>
+        <div class="prog-title">주간 체성분 분석</div>
+        <p class="prog-desc">체중뿐 아니라 체지방·근육량 변화를 주마다 리포트로 제공.</p>
+      </div>
+    </div>
+    <div class="program-item reveal">
+      <div class="prog-icon">🔒</div>
+      <div>
+        <div class="prog-title">요요 방지 유지 관리</div>
+        <p class="prog-desc">프로그램 종료 후에도 요요 없이 유지할 수 있도록 관리법 제공.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section class="section">
+  <p class="sec-label reveal">체험단 혜택</p>
+  <h2 class="sec-title reveal">지금 신청하면<br>이 가격에 시작</h2>
+  <p class="sec-desc reveal">체험단 기간에만 제공되는 특별 혜택입니다</p>
+
+  <div class="price-cards">
+    <div class="price-card reveal">
+      <div class="price-name">일반 등록</div>
+      <div class="price-num"><span class="won">₩</span>198,000</div>
+      <div class="price-period">4주 프로그램</div>
+      <ul class="price-features">
+        <li class="price-feat"><span class="pf-check">✓</span>맞춤 식단 플랜</li>
+        <li class="price-feat"><span class="pf-check">✓</span>주간 리포트</li>
+        <li class="price-feat" style="color:var(--muted)"><span style="color:var(--muted)">✗</span>1:1 매니저 케어</li>
+        <li class="price-feat" style="color:var(--muted)"><span style="color:var(--muted)">✗</span>환불 보장</li>
+      </ul>
+    </div>
+    <div class="price-card featured reveal">
+      <div class="price-badge">🔥 체험단 한정</div>
+      <div class="price-name">체험단 특가</div>
+      <div class="price-num">
+        <span class="won">₩</span>0
+        <span class="origin">₩198,000</span>
+      </div>
+      <div class="price-period">첫 달 무료 · 이후 월 ₩98,000</div>
+      <ul class="price-features">
+        <li class="price-feat"><span class="pf-check">✓</span>맞춤 식단 플랜</li>
+        <li class="price-feat"><span class="pf-check">✓</span>주간 리포트</li>
+        <li class="price-feat"><span class="pf-check">✓</span>1:1 매니저 케어</li>
+        <li class="price-feat"><span class="pf-check">✓</span>불만족 100% 환불</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section class="section">
+  <p class="sec-label reveal">자주 묻는 질문</p>
+  <h2 class="sec-title reveal">궁금한 점이 있으신가요?</h2>
+
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        체험단은 어떻게 신청하나요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">아래 신청 버튼을 누르거나 카카오톡으로 문의해 주시면 담당자가 안내해 드립니다. 신청 후 24시간 이내 연락드립니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        정말 굶지 않아도 빠지나요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">네, 저희 프로그램은 굶는 다이어트가 아닙니다. 먹는 양보다 무엇을, 언제 먹느냐를 조절해 체지방만 빠지도록 설계합니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        환불은 어떻게 되나요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">4주 프로그램 성실히 이행 후 체중 감량이 없다면 100% 환불해 드립니다. 자세한 조건은 상담 시 안내해 드립니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        운동을 못해도 괜찮나요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">괜찮습니다. 운동 경험이 없어도 집에서 할 수 있는 루틴으로 구성되며, 체력 수준에 맞게 조정해 드립니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        체험단 종료 후 요요가 오지 않나요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">프로그램 마지막 주에 유지 관리법을 집중적으로 교육합니다. 94%의 참여자가 종료 후 3개월 이상 유지에 성공했습니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="apply">
+  <h2 class="reveal">잔여 <span>8자리</span>입니다<br>지금 신청하세요</h2>
+  <p class="reveal">
+    체험단 마감 후에는 정가로만 등록 가능합니다<br>
+    지금이 가장 저렴하게 시작할 수 있는 기회입니다
+  </p>
+  <div class="final-btns">
+    <button class="btn-main reveal" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">💬 카카오로 체험단 신청</button>
+    <button class="btn-sub reveal" onclick="window.location.href='tel:010-0000-0000'">📞 전화 신청</button>
+  </div>
+</section>
+
+<footer>
+  <!-- ✅ 실제 정보로 교체 -->
+  ○○다이어트 · 사업자등록번호 000-00-00000<br>
+  서울시 ○○구 ○○로 000 · Tel. 010-0000-0000<br>
+  © 2025 ○○다이어트. All rights reserved.
+</footer>
+
+<script>
+// 카운트다운 — 마감일 설정 (✅ 원하는 날짜로 교체)
+const deadline = new Date();
+deadline.setDate(deadline.getDate() + 3);
+deadline.setHours(23, 59, 59, 0);
+
+function updateCountdown() {
+  const now = new Date();
+  const diff = deadline - now;
+  if (diff <= 0) {
+    document.querySelectorAll('.cd-num').forEach(el => el.textContent = '00');
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-day').textContent  = String(d).padStart(2,'0');
+  document.getElementById('cd-hour').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-min').textContent  = String(m).padStart(2,'0');
+  document.getElementById('cd-sec').textContent  = String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// FAQ
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

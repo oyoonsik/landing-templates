@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>○○ 헬스장 | PT 등록 · 무료 체험 신청</title>
+<meta name="description" content="전문 트레이너 1:1 PT. 지금 무료 체험 신청하세요.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --orange: #FF6B2B;
+  --orange2: #E85A1E;
+  --orange-light: rgba(255,107,43,0.10);
+  --orange-border: rgba(255,107,43,0.28);
+  --bg: #0A0805;
+  --surface: #141008;
+  --surface2: #1C1610;
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.15);
+  --text: #FFF8F5;
+  --muted: rgba(255,248,245,0.50);
+  --muted2: rgba(255,248,245,0.28);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+
+/* ── FLOATING ── */
+.float-cta {
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex; gap: 10px;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+}
+.float-btn {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px; font-weight: 700;
+  padding: 14px 26px; border-radius: 100px; border: none;
+  cursor: pointer; white-space: nowrap;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.float-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+.float-btn.kakao { background: #FEE500; color: #1A1A1A; }
+.float-btn.call  { background: var(--orange); color: #fff; }
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(10,8,5,0.90);
+  backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+}
+.nav-logo { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+.nav-logo span { color: var(--orange); }
+.nav-cta {
+  background: var(--orange); color: #fff;
+  font-size: 13px; font-weight: 700;
+  padding: 9px 20px; border-radius: 100px;
+  transition: opacity 0.15s;
+}
+.nav-cta:hover { opacity: 0.88; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 80px 24px 60px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; bottom: -100px; left: 50%;
+  transform: translateX(-50%);
+  width: 700px; height: 500px;
+  background: radial-gradient(circle, rgba(255,107,43,0.13) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--orange-light);
+  border: 0.5px solid var(--orange-border);
+  color: var(--orange);
+  font-size: 12px; font-weight: 600;
+  padding: 7px 18px; border-radius: 100px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-badge::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--orange);
+  animation: blink 1.6s infinite;
+}
+
+.hero h1 {
+  font-size: clamp(34px, 8vw, 70px);
+  font-weight: 900;
+  line-height: 1.08; letter-spacing: -0.035em;
+  margin-bottom: 20px;
+  animation: fadeUp 0.6s 0.08s ease both;
+}
+.hero h1 .accent { color: var(--orange); }
+
+.hero p {
+  font-size: clamp(15px, 2.5vw, 19px);
+  color: var(--muted); line-height: 1.75;
+  margin-bottom: 44px;
+  animation: fadeUp 0.6s 0.14s ease both;
+}
+.hero p strong { color: var(--text); font-weight: 500; }
+
+.hero-btns {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.btn-main {
+  background: var(--orange); color: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px; font-weight: 700;
+  padding: 17px 36px; border-radius: 100px; border: none;
+  cursor: pointer; transition: opacity 0.15s, transform 0.15s;
+  box-shadow: 0 8px 32px rgba(255,107,43,0.35);
+}
+.btn-main:hover { opacity: 0.9; transform: translateY(-2px); }
+.btn-sub {
+  background: rgba(255,255,255,0.07);
+  border: 0.5px solid var(--border-hover);
+  color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px; font-weight: 500;
+  padding: 17px 36px; border-radius: 100px;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-sub:hover { background: rgba(255,255,255,0.12); color: var(--text); }
+
+.trust-bar {
+  display: flex; gap: 28px; flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 56px; padding-top: 36px;
+  border-top: 0.5px solid var(--border);
+  animation: fadeUp 0.6s 0.26s ease both;
+}
+.trust-item { text-align: center; }
+.trust-num {
+  font-size: 28px; font-weight: 900;
+  color: var(--orange); letter-spacing: -0.04em; line-height: 1;
+}
+.trust-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* ── SECTION ── */
+.section {
+  max-width: 700px; margin: 0 auto;
+  padding: 80px 24px;
+}
+.sec-label {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; color: var(--orange);
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.sec-title {
+  font-size: clamp(24px, 4.5vw, 36px);
+  font-weight: 900; letter-spacing: -0.03em;
+  line-height: 1.2; margin-bottom: 14px;
+}
+.sec-desc {
+  font-size: 15px; color: var(--muted);
+  line-height: 1.8; margin-bottom: 40px;
+}
+
+/* ── TRAINER CARDS ── */
+.trainer-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.trainer-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.trainer-card:hover { border-color: var(--orange-border); transform: translateY(-3px); }
+.trainer-img {
+  width: 100%; aspect-ratio: 1/1;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 56px;
+  position: relative;
+}
+.trainer-spec {
+  position: absolute; bottom: 10px; left: 10px;
+  display: flex; gap: 5px; flex-wrap: wrap;
+}
+.spec-tag {
+  font-size: 10px; font-weight: 600;
+  background: var(--orange); color: #fff;
+  padding: 3px 8px; border-radius: 100px;
+}
+.trainer-body { padding: 18px; }
+.trainer-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.trainer-title { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.trainer-career {
+  list-style: none; display: flex; flex-direction: column; gap: 5px;
+}
+.tc-item {
+  display: flex; align-items: flex-start; gap: 7px;
+  font-size: 12px; color: rgba(255,248,245,0.7); line-height: 1.5;
+}
+.tc-dot {
+  flex-shrink: 0; width: 4px; height: 4px;
+  border-radius: 50%; background: var(--orange);
+  margin-top: 5px;
+}
+
+/* ── REVIEW SLIDER ── */
+.review-list {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.review-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 22px;
+  display: flex; gap: 16px;
+  transition: border-color 0.2s;
+}
+.review-card:hover { border-color: var(--orange-border); }
+.r-avatar {
+  flex-shrink: 0; width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--orange-light);
+  border: 0.5px solid var(--orange-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: var(--orange);
+}
+.r-body { flex: 1; }
+.r-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.r-name { font-size: 14px; font-weight: 700; }
+.r-stars { color: var(--orange); font-size: 13px; }
+.r-tag { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.r-text {
+  font-size: 14px; color: rgba(255,248,245,0.72);
+  line-height: 1.75;
+}
+.r-result {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 12px; font-weight: 600;
+  color: var(--orange);
+  background: var(--orange-light);
+  border: 0.5px solid var(--orange-border);
+  padding: 3px 10px; border-radius: 100px;
+}
+
+/* ── PT PACKAGES ── */
+.pkg-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+}
+.pkg-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 16px; padding: 24px 18px;
+  text-align: center; position: relative;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.pkg-card:hover { transform: translateY(-3px); }
+.pkg-card.popular {
+  border-color: var(--orange-border);
+  background: var(--orange-light);
+}
+.pkg-badge {
+  position: absolute; top: -12px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--orange); color: #fff;
+  font-size: 11px; font-weight: 700;
+  padding: 4px 14px; border-radius: 100px;
+  white-space: nowrap;
+}
+.pkg-name { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+.pkg-sessions {
+  font-size: 36px; font-weight: 900;
+  color: var(--orange); letter-spacing: -0.04em;
+  line-height: 1; margin-bottom: 4px;
+}
+.pkg-sessions span { font-size: 16px; }
+.pkg-price {
+  font-size: 18px; font-weight: 700;
+  margin-bottom: 4px; letter-spacing: -0.02em;
+}
+.pkg-per {
+  font-size: 11px; color: var(--muted);
+  margin-bottom: 20px;
+}
+.pkg-features {
+  list-style: none; display: flex;
+  flex-direction: column; gap: 7px;
+  text-align: left;
+}
+.pkg-feat {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; color: rgba(255,248,245,0.72);
+}
+.pf-check { color: var(--orange); flex-shrink: 0; }
+
+/* ── FACILITY ── */
+.facility-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+}
+.facility-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 22px 18px;
+  display: flex; align-items: center; gap: 14px;
+  transition: border-color 0.2s;
+}
+.facility-card:hover { border-color: var(--orange-border); }
+.fac-icon {
+  flex-shrink: 0; width: 44px; height: 44px;
+  border-radius: 12px;
+  background: var(--orange-light);
+  border: 0.5px solid var(--orange-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.fac-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.fac-desc  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── PROCESS ── */
+.process-list {
+  display: flex; flex-direction: column; gap: 0;
+  position: relative;
+}
+.process-list::before {
+  content: '';
+  position: absolute; left: 21px; top: 0; bottom: 0;
+  width: 0.5px; background: var(--border);
+}
+.process-item {
+  display: flex; gap: 20px;
+  padding-bottom: 32px; position: relative;
+}
+.process-item:last-child { padding-bottom: 0; }
+.proc-num {
+  flex-shrink: 0; width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--orange); color: #fff;
+  font-size: 15px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+}
+.proc-content { padding-top: 7px; }
+.proc-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.proc-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* ── FAQ ── */
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+.faq-item {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.faq-q {
+  width: 100%; text-align: left;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 600;
+  background: none; border: none; cursor: pointer;
+  color: var(--text); transition: background 0.15s;
+}
+.faq-q:hover { background: rgba(255,255,255,0.03); }
+.faq-icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--orange-light);
+  border: 0.5px solid var(--orange-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--orange);
+  transition: transform 0.25s; flex-shrink: 0;
+}
+.faq-a {
+  display: none;
+  padding: 14px 20px 18px;
+  font-size: 13px; color: var(--muted); line-height: 1.8;
+  border-top: 0.5px solid var(--border);
+}
+.faq-item.open .faq-a { display: block; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+
+/* ── FINAL CTA ── */
+.final-cta {
+  background: var(--surface);
+  border-top: 0.5px solid var(--border);
+  padding: 88px 24px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.final-cta::before {
+  content: '';
+  position: absolute; top: -120px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 500px;
+  background: radial-gradient(circle, rgba(255,107,43,0.11) 0%, transparent 65%);
+  pointer-events: none;
+}
+.final-cta h2 {
+  font-size: clamp(26px, 5vw, 44px);
+  font-weight: 900; letter-spacing: -0.03em;
+  line-height: 1.2; margin-bottom: 14px;
+  position: relative;
+}
+.final-cta h2 span { color: var(--orange); }
+.final-cta p {
+  font-size: 15px; color: var(--muted);
+  line-height: 1.75; margin-bottom: 40px;
+  position: relative;
+}
+.final-btns {
+  display: flex; gap: 12px;
+  justify-content: center; flex-wrap: wrap;
+  position: relative;
+}
+
+/* ── DIVIDER ── */
+.divider { height: 0.5px; background: var(--border); }
+
+/* ── FOOTER ── */
+footer {
+  padding: 28px 24px; text-align: center;
+  border-top: 0.5px solid var(--border);
+  font-size: 12px; color: var(--muted2); line-height: 1.8;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+}
+.reveal {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 560px) {
+  .trainer-grid { grid-template-columns: 1fr; }
+  .pkg-grid { grid-template-columns: 1fr; }
+  .facility-grid { grid-template-columns: 1fr; }
+  .float-cta { width: calc(100% - 32px); }
+  .float-btn { flex: 1; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- FLOATING -->
+<div class="float-cta">
+  <button class="float-btn kakao" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">💬 카카오 상담</button>
+  <button class="float-btn call" onclick="window.location.href='tel:010-0000-0000'">📞 무료 체험 신청</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">○○<span>헬스</span></div>
+  <a href="#apply" class="nav-cta">PT 무료 체험 →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🔥 이번 달 PT 무료 체험 진행 중</div>
+  <h1>
+    전문 트레이너와<br>
+    <span class="accent">1:1 PT</span>로<br>
+    몸이 달라집니다
+  </h1>
+  <p>
+    처음 3회 <strong>무료 체험</strong> 후 결정하세요.<br>
+    마음에 안 드시면 <strong>비용 없이 종료</strong> 가능합니다.
+  </p>
+  <div class="hero-btns">
+    <button class="btn-main" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">💪 무료 체험 신청하기</button>
+    <button class="btn-sub" onclick="document.getElementById('trainers').scrollIntoView({behavior:'smooth'})">트레이너 보기</button>
+  </div>
+
+  <div class="trust-bar">
+    <div class="trust-item">
+      <div class="trust-num">5년+</div>
+      <div class="trust-label">평균 트레이너 경력</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">1,800+</div>
+      <div class="trust-label">누적 PT 회원</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">4.9점</div>
+      <div class="trust-label">회원 만족도</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">3회</div>
+      <div class="trust-label">무료 체험 제공</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINERS -->
+<section class="section" id="trainers">
+  <p class="sec-label reveal">트레이너 소개</p>
+  <h2 class="sec-title reveal">담당 트레이너를<br>직접 선택하세요</h2>
+  <p class="sec-desc reveal">자격증과 경력이 검증된 전문 트레이너가 1:1로 케어합니다</p>
+
+  <div class="trainer-grid">
+    <div class="trainer-card reveal">
+      <div class="trainer-img">
+        🏋️‍♂️
+        <div class="trainer-spec">
+          <span class="spec-tag">바디프로필</span>
+          <span class="spec-tag">다이어트</span>
+        </div>
+      </div>
+      <div class="trainer-body">
+        <div class="trainer-name">김○○ 트레이너</div>
+        <div class="trainer-title">생활스포츠지도사 2급 · 경력 7년</div>
+        <ul class="trainer-career">
+          <li class="tc-item"><span class="tc-dot"></span>국가대표 출신 퍼스널 트레이너</li>
+          <li class="tc-item"><span class="tc-dot"></span>바디프로필 전문 코칭 500+ 건</li>
+          <li class="tc-item"><span class="tc-dot"></span>NASM-CPT 자격 보유</li>
+        </ul>
+      </div>
+    </div>
+    <div class="trainer-card reveal">
+      <div class="trainer-img">
+        🏋️‍♀️
+        <div class="trainer-spec">
+          <span class="spec-tag">여성전문</span>
+          <span class="spec-tag">재활</span>
+        </div>
+      </div>
+      <div class="trainer-body">
+        <div class="trainer-name">이○○ 트레이너</div>
+        <div class="trainer-title">생활스포츠지도사 1급 · 경력 5년</div>
+        <ul class="trainer-career">
+          <li class="tc-item"><span class="tc-dot"></span>여성 다이어트 전문 코칭</li>
+          <li class="tc-item"><span class="tc-dot"></span>재활운동 및 체형교정 특화</li>
+          <li class="tc-item"><span class="tc-dot"></span>산전·산후 운동 전문</li>
+        </ul>
+      </div>
+    </div>
+    <div class="trainer-card reveal">
+      <div class="trainer-img">
+        💪
+        <div class="trainer-spec">
+          <span class="spec-tag">근력향상</span>
+          <span class="spec-tag">벌크업</span>
+        </div>
+      </div>
+      <div class="trainer-body">
+        <div class="trainer-name">박○○ 트레이너</div>
+        <div class="trainer-title">생활스포츠지도사 2급 · 경력 6년</div>
+        <ul class="trainer-career">
+          <li class="tc-item"><span class="tc-dot"></span>파워리프팅 대회 입상</li>
+          <li class="tc-item"><span class="tc-dot"></span>근력·벌크업 전문 코칭</li>
+          <li class="tc-item"><span class="tc-dot"></span>남성 바디 체형 교정 특화</li>
+        </ul>
+      </div>
+    </div>
+    <div class="trainer-card reveal">
+      <div class="trainer-img">
+        🧘‍♀️
+        <div class="trainer-spec">
+          <span class="spec-tag">체형교정</span>
+          <span class="spec-tag">필라테스</span>
+        </div>
+      </div>
+      <div class="trainer-body">
+        <div class="trainer-name">최○○ 트레이너</div>
+        <div class="trainer-title">필라테스 지도자 자격 · 경력 4년</div>
+        <ul class="trainer-career">
+          <li class="tc-item"><span class="tc-dot"></span>척추·골반 체형교정 전문</li>
+          <li class="tc-item"><span class="tc-dot"></span>통증 없는 운동 설계 특화</li>
+          <li class="tc-item"><span class="tc-dot"></span>40~60대 건강관리 전문</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REVIEWS -->
+<section class="section">
+  <p class="sec-label reveal">수강 후기</p>
+  <h2 class="sec-title reveal">실제 회원들의<br>변화 이야기</h2>
+
+  <div class="review-list">
+    <div class="review-card reveal">
+      <div class="r-avatar">김</div>
+      <div class="r-body">
+        <div class="r-header">
+          <div class="r-name">김○○ 님</div>
+          <div class="r-stars">★★★★★</div>
+        </div>
+        <div class="r-tag">30대 직장인 · 바디프로필 코칭</div>
+        <p class="r-text">3개월 전엔 운동이라곤 전혀 안 하던 제가 바디프로필 찍었어요. 트레이너님이 체력에 맞게 단계적으로 올려줘서 부상 없이 할 수 있었습니다.</p>
+        <span class="r-result">체지방 -8% · 근육량 +3kg</span>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="r-avatar">박</div>
+      <div class="r-body">
+        <div class="r-header">
+          <div class="r-name">박○○ 님</div>
+          <div class="r-stars">★★★★★</div>
+        </div>
+        <div class="r-tag">40대 주부 · 다이어트+체형교정</div>
+        <p class="r-text">출산 후 체형이 엉망이었는데 2개월 만에 골반이 교정되고 허리 통증이 없어졌어요. 운동이 이렇게 즐거운 건지 몰랐어요.</p>
+        <span class="r-result">체중 -6kg · 허리 통증 해소</span>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="r-avatar">이</div>
+      <div class="r-body">
+        <div class="r-header">
+          <div class="r-name">이○○ 님</div>
+          <div class="r-stars">★★★★★</div>
+        </div>
+        <div class="r-tag">20대 남성 · 근력·벌크업</div>
+        <p class="r-text">혼자 헬스장 다닌 지 2년인데 달라지는 게 없었어요. PT 시작하고 4개월 만에 주변에서 다들 놀라더라고요. 자세부터 다 잡아줘서 효과가 달랐어요.</p>
+        <span class="r-result">벤치 +40kg · 근육량 +5kg</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PT PACKAGES -->
+<section class="section">
+  <p class="sec-label reveal">PT 패키지</p>
+  <h2 class="sec-title reveal">합리적인 가격으로<br>시작하세요</h2>
+  <p class="sec-desc reveal">모든 패키지 무료 체험 3회 포함 · 담당 트레이너 지정 가능</p>
+
+  <div class="pkg-grid">
+    <div class="pkg-card reveal">
+      <div class="pkg-name">베이직</div>
+      <div class="pkg-sessions">10<span>회</span></div>
+      <div class="pkg-price">₩390,000</div>
+      <div class="pkg-per">회당 ₩39,000</div>
+      <ul class="pkg-features">
+        <li class="pkg-feat"><span class="pf-check">✓</span>1:1 맞춤 PT</li>
+        <li class="pkg-feat"><span class="pf-check">✓</span>체성분 분석</li>
+        <li class="pkg-feat"><span class="pf-check">✓</span>운동 루틴 제공</li>
+        <li class="pkg-feat" style="color:var(--muted)"><span style="color:var(--muted)">✗</span>식단 관리</li>
+      </ul>
+    </div>
+    <div class="pkg-card popular reveal">
+      <div class="pkg-badge">🔥 가장 인기</div>
+      <div class="pkg-name">스탠다드</div>
+      <div class="pkg-sessions">20<span>회</span></div>
+      <div class="pkg-price">₩680,000</div>
+      <div class="pkg-per">회당 ₩34,000</div>
+      <ul class="pkg-features">
+        <li class="pkg-feat"><span class="pf-check">✓</span>1:1 맞춤 PT</li>
+        <li class="pkg-feat"><span class="pf-check">✓</span>체성분 분석</li>
+        <li class="pkg-feat"><span class="pf-check">✓</span>운동 루틴 제공</li>
+        <li class="pkg-feat"><span class="pf-check">✓</span>식단 관리</li>
+      </ul>
+    </div>
+    <div class="pkg-card reveal">
+      <div class="pkg-name">프리미엄</div>
+      <div class="pkg-sessions">30<span>회</span></div>
+      <div class="pkg-price">₩870,000</div>
+      <div class="pkg-per">회당 ₩29,000</div>
+      <ul class="pkg-features">
+        <li class="pkg-feat"><span class="pf-check">✓</span>1:1 맞춤 PT</li>
+        <li class="pkg-feat"><span class="pf-check">✓</span>체성분 분석</li>
+        <li class="pkg-feat"><span class="pf-check">✓</span>운동 루틴 제공</li>
+        <li class="pkg-feat"><span class="pf-check">✓</span>식단 관리 + 보충제 추천</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FACILITY -->
+<section class="section">
+  <p class="sec-label reveal">시설 안내</p>
+  <h2 class="sec-title reveal">운동에만 집중할 수 있는<br>환경을 만들었습니다</h2>
+
+  <div class="facility-grid">
+    <div class="facility-card reveal">
+      <div class="fac-icon">🏋️</div>
+      <div>
+        <div class="fac-title">최신 기구 완비</div>
+        <div class="fac-desc">국내외 프리미엄 브랜드 기구 전 구비. 대기 없이 이용 가능.</div>
+      </div>
+    </div>
+    <div class="facility-card reveal">
+      <div class="fac-icon">🚿</div>
+      <div>
+        <div class="fac-title">개인 샤워실·락커</div>
+        <div class="fac-desc">깨끗한 개인 샤워 공간과 보안 락커 제공.</div>
+      </div>
+    </div>
+    <div class="facility-card reveal">
+      <div class="fac-icon">🅿️</div>
+      <div>
+        <div class="fac-title">주차 1시간 무료</div>
+        <div class="fac-desc">건물 내 주차장 이용 시 1시간 무료 지원.</div>
+      </div>
+    </div>
+    <div class="facility-card reveal">
+      <div class="fac-icon">📸</div>
+      <div>
+        <div class="fac-title">바디프로필 스튜디오</div>
+        <div class="fac-desc">목표 달성 후 촬영 가능한 전용 스튜디오 보유.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROCESS -->
+<section class="section">
+  <p class="sec-label reveal">등록 절차</p>
+  <h2 class="sec-title reveal">무료 체험부터<br>PT 시작까지</h2>
+
+  <div class="process-list">
+    <div class="process-item reveal">
+      <div class="proc-num">1</div>
+      <div class="proc-content">
+        <div class="proc-title">카카오 또는 전화로 무료 체험 신청</div>
+        <p class="proc-desc">목표와 원하는 시간대를 알려주시면 맞춤 일정을 안내드립니다. 당일 예약도 가능합니다.</p>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="proc-num">2</div>
+      <div class="proc-content">
+        <div class="proc-title">체성분 분석 + 트레이너 상담</div>
+        <p class="proc-desc">인바디 측정 후 목표에 맞는 트레이너와 1:1 상담. 운동 방향을 함께 정합니다.</p>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="proc-num">3</div>
+      <div class="proc-content">
+        <div class="proc-title">무료 체험 3회 진행</div>
+        <p class="proc-desc">실제 PT를 3회 무료로 경험해보세요. 트레이너와 맞지 않으면 변경도 가능합니다.</p>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="proc-num">4</div>
+      <div class="proc-content">
+        <div class="proc-title">패키지 선택 후 정식 등록</div>
+        <p class="proc-desc">체험 후 마음에 드시면 원하는 패키지를 선택해 시작하시면 됩니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section class="section">
+  <p class="sec-label reveal">자주 묻는 질문</p>
+  <h2 class="sec-title reveal">궁금한 점이 있으신가요?</h2>
+
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        운동을 처음 해봐도 괜찮나요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">물론입니다. 초보자를 위한 커리큘럼이 따로 준비되어 있으며, 체력 수준에 맞게 단계적으로 설계해 드립니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        트레이너를 중간에 바꿀 수 있나요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">네, 가능합니다. 무료 체험 기간뿐 아니라 등록 후에도 트레이너 변경 요청을 받아드립니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        일정이 불규칙한데 예약이 가능한가요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">카카오 채널로 언제든지 예약 변경이 가능합니다. 최소 2시간 전 연락 시 취소·변경 페널티 없이 조정 가능합니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        부상이 있어도 PT가 가능한가요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">상담 시 부상 부위를 말씀해 주시면 재활 전문 트레이너와 매칭하거나 부상을 고려한 운동 프로그램을 구성합니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        환불 정책이 어떻게 되나요?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">소비자보호법 기준에 따라 환불 처리됩니다. 잔여 횟수에 따라 비례 환불이 가능하며 자세한 내용은 상담 시 안내드립니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="apply">
+  <h2 class="reveal">지금 바로<br><span>무료 체험</span> 신청하세요</h2>
+  <p class="reveal">
+    3회 무료 체험 후 결정하시면 됩니다<br>
+    부담 없이 먼저 경험해보세요
+  </p>
+  <div class="final-btns">
+    <button class="btn-main reveal" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">💬 카카오로 무료 체험 신청</button>
+    <button class="btn-sub reveal" onclick="window.location.href='tel:010-0000-0000'">📞 전화 신청</button>
+  </div>
+</section>
+
+<footer>
+  <!-- ✅ 실제 정보로 교체 -->
+  ○○헬스 · 사업자등록번호 000-00-00000<br>
+  서울시 ○○구 ○○로 000 · Tel. 010-0000-0000<br>
+  © 2025 ○○헬스. All rights reserved.
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

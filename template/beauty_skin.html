@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>○○피부샵 | 피부 고민 해결 · 당일 예약 가능</title>
+<meta name="description" content="피부 고민별 맞춤 시술. 지금 당일 예약 신청하세요.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --pink: #F060B0;
+  --pink2: #D4469A;
+  --pink-light: rgba(240,96,176,0.10);
+  --pink-border: rgba(240,96,176,0.28);
+  --bg: #0F080C;
+  --surface: #18080F;
+  --surface2: #220D18;
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.15);
+  --text: #FFF0F8;
+  --muted: rgba(255,240,248,0.50);
+  --muted2: rgba(255,240,248,0.28);
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+
+/* FLOATING */
+.float-cta {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 999; display: flex; gap: 10px;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+}
+.float-btn {
+  font-family: 'Noto Sans KR', sans-serif; font-size: 15px; font-weight: 700;
+  padding: 14px 26px; border-radius: 100px; border: none;
+  cursor: pointer; white-space: nowrap; transition: transform 0.15s, opacity 0.15s;
+}
+.float-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+.float-btn.kakao { background: #FEE500; color: #1A1A1A; }
+.float-btn.call  { background: var(--pink); color: #fff; }
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100; height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; background: rgba(15,8,12,0.90);
+  backdrop-filter: blur(12px); border-bottom: 0.5px solid var(--border);
+}
+.nav-logo { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+.nav-logo span { color: var(--pink); }
+.nav-cta {
+  background: var(--pink); color: #fff;
+  font-size: 13px; font-weight: 700; padding: 9px 20px; border-radius: 100px;
+  transition: opacity 0.15s;
+}
+.nav-cta:hover { opacity: 0.88; }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 80px 24px 60px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -150px; left: 50%;
+  transform: translateX(-50%); width: 700px; height: 600px;
+  background: radial-gradient(circle, rgba(240,96,176,0.13) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--pink-light); border: 0.5px solid var(--pink-border);
+  color: var(--pink); font-size: 12px; font-weight: 600;
+  padding: 7px 18px; border-radius: 100px; margin-bottom: 28px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--pink); animation: blink 1.6s infinite;
+}
+.hero h1 {
+  font-size: clamp(34px, 8vw, 66px); font-weight: 900;
+  line-height: 1.1; letter-spacing: -0.035em; margin-bottom: 20px;
+  animation: fadeUp 0.6s 0.08s ease both;
+}
+.hero h1 .accent { color: var(--pink); }
+.hero p {
+  font-size: clamp(15px, 2.5vw, 19px); color: var(--muted); line-height: 1.75;
+  margin-bottom: 44px; animation: fadeUp 0.6s 0.14s ease both;
+}
+.hero p strong { color: var(--text); font-weight: 500; }
+.hero-btns {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.btn-main {
+  background: var(--pink); color: #fff;
+  font-family: 'Noto Sans KR', sans-serif; font-size: 16px; font-weight: 700;
+  padding: 17px 36px; border-radius: 100px; border: none;
+  cursor: pointer; transition: opacity 0.15s, transform 0.15s;
+  box-shadow: 0 8px 32px rgba(240,96,176,0.35);
+}
+.btn-main:hover { opacity: 0.9; transform: translateY(-2px); }
+.btn-sub {
+  background: rgba(255,255,255,0.07); border: 0.5px solid var(--border-hover);
+  color: var(--muted); font-family: 'Noto Sans KR', sans-serif;
+  font-size: 16px; font-weight: 500; padding: 17px 36px; border-radius: 100px;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-sub:hover { background: rgba(255,255,255,0.12); color: var(--text); }
+.trust-bar {
+  display: flex; gap: 28px; flex-wrap: wrap; justify-content: center;
+  margin-top: 56px; padding-top: 36px; border-top: 0.5px solid var(--border);
+  animation: fadeUp 0.6s 0.26s ease both;
+}
+.trust-item { text-align: center; }
+.trust-num { font-size: 28px; font-weight: 900; color: var(--pink); letter-spacing: -0.04em; line-height: 1; }
+.trust-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* SECTION */
+.section { max-width: 700px; margin: 0 auto; padding: 80px 24px; }
+.sec-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; color: var(--pink); text-transform: uppercase; margin-bottom: 12px; }
+.sec-title { font-size: clamp(24px, 4.5vw, 36px); font-weight: 900; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 14px; }
+.sec-desc { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 40px; }
+
+/* CONCERN FILTER */
+.concern-filter {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 28px; justify-content: center;
+}
+.concern-btn {
+  padding: 9px 18px; border-radius: 100px;
+  border: 0.5px solid var(--border);
+  background: transparent; color: var(--muted);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.18s;
+}
+.concern-btn:hover { border-color: var(--pink-border); color: var(--text); }
+.concern-btn.active { background: var(--pink); border-color: var(--pink); color: #fff; }
+
+/* MENU GRID */
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.menu-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s; cursor: pointer;
+}
+.menu-card:hover { border-color: var(--pink-border); transform: translateY(-3px); }
+.menu-card.hidden { display: none; }
+.menu-img {
+  width: 100%; aspect-ratio: 4/3;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center; font-size: 44px;
+  position: relative;
+}
+.menu-tag {
+  position: absolute; top: 10px; left: 10px;
+  font-size: 10px; font-weight: 700;
+  background: var(--pink); color: #fff;
+  padding: 3px 10px; border-radius: 100px;
+}
+.menu-popular {
+  position: absolute; top: 10px; right: 10px;
+  font-size: 10px; font-weight: 700;
+  background: rgba(255,200,50,0.9); color: #1A1A1A;
+  padding: 3px 10px; border-radius: 100px;
+}
+.menu-body { padding: 16px 18px; }
+.menu-concern { font-size: 11px; color: var(--pink); font-weight: 600; margin-bottom: 5px; }
+.menu-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.01em; }
+.menu-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+.menu-footer { display: flex; align-items: center; justify-content: space-between; }
+.menu-price { font-size: 16px; font-weight: 700; color: var(--pink); }
+.menu-time { font-size: 11px; color: var(--muted); }
+
+/* BEFORE AFTER */
+.ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ba-pair {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 16px; overflow: hidden; transition: border-color 0.2s;
+}
+.ba-pair:hover { border-color: var(--pink-border); }
+.ba-imgs { display: grid; grid-template-columns: 1fr 1fr; }
+.ba-img {
+  aspect-ratio: 1/1;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; position: relative;
+}
+.ba-img:first-child { border-right: 0.5px solid var(--border); }
+.ba-label {
+  position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+  font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 100px; white-space: nowrap;
+}
+.ba-label.before { background: rgba(255,255,255,0.15); color: var(--muted); }
+.ba-label.after  { background: var(--pink); color: #fff; }
+.ba-info { padding: 14px 16px; }
+.ba-concern { font-size: 11px; color: var(--pink); font-weight: 600; margin-bottom: 4px; }
+.ba-result { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.ba-session { font-size: 11px; color: var(--muted); }
+
+/* SPECIALIST */
+.specialist-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 20px; padding: 28px; display: flex; gap: 22px; align-items: flex-start;
+  transition: border-color 0.2s;
+}
+.specialist-card:hover { border-color: var(--pink-border); }
+.sp-avatar {
+  flex-shrink: 0; width: 72px; height: 72px; border-radius: 50%;
+  background: var(--pink-light); border: 2px solid var(--pink-border);
+  display: flex; align-items: center; justify-content: center; font-size: 28px;
+}
+.sp-info { flex: 1; }
+.sp-name { font-size: 18px; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 3px; }
+.sp-title { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.sp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.sp-tag {
+  font-size: 11px; font-weight: 600;
+  background: var(--pink-light); border: 0.5px solid var(--pink-border);
+  color: var(--pink); padding: 4px 12px; border-radius: 100px;
+}
+.sp-career { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.sp-career li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: rgba(255,240,248,0.72); line-height: 1.5; }
+.sp-dot { flex-shrink: 0; width: 5px; height: 5px; border-radius: 50%; background: var(--pink); margin-top: 6px; }
+
+/* REVIEW */
+.review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.review-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 20px; transition: border-color 0.2s;
+}
+.review-card:hover { border-color: var(--pink-border); }
+.r-stars { color: var(--pink); font-size: 13px; margin-bottom: 10px; }
+.r-text { font-size: 13px; color: rgba(255,240,248,0.72); line-height: 1.75; margin-bottom: 14px; }
+.r-author { display: flex; align-items: center; gap: 8px; }
+.r-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--pink-light); border: 0.5px solid var(--pink-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--pink);
+}
+.r-name { font-size: 12px; font-weight: 600; }
+.r-tag  { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+/* PROCESS */
+.process-list { display: flex; flex-direction: column; gap: 0; position: relative; }
+.process-list::before {
+  content: ''; position: absolute; left: 22px; top: 0; bottom: 0;
+  width: 0.5px; background: linear-gradient(to bottom, var(--pink), rgba(240,96,176,0.1));
+}
+.process-item { display: flex; gap: 20px; padding-bottom: 28px; }
+.process-item:last-child { padding-bottom: 0; }
+.proc-num {
+  flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--pink); color: #fff; font-size: 15px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;
+}
+.proc-content { padding-top: 7px; }
+.proc-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.proc-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* FAQ */
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+.faq-item { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+.faq-q {
+  width: 100%; text-align: left; display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px; font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 600; background: none; border: none;
+  cursor: pointer; color: var(--text); transition: background 0.15s;
+}
+.faq-q:hover { background: rgba(255,255,255,0.03); }
+.faq-icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--pink-light); border: 0.5px solid var(--pink-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--pink); transition: transform 0.25s; flex-shrink: 0;
+}
+.faq-a { display: none; padding: 14px 20px 18px; font-size: 13px; color: var(--muted); line-height: 1.8; border-top: 0.5px solid var(--border); }
+.faq-item.open .faq-a { display: block; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+
+/* FINAL CTA */
+.final-cta {
+  background: var(--surface); border-top: 0.5px solid var(--border);
+  padding: 88px 24px; text-align: center; position: relative; overflow: hidden;
+}
+.final-cta::before {
+  content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 500px;
+  background: radial-gradient(circle, rgba(240,96,176,0.11) 0%, transparent 65%);
+  pointer-events: none;
+}
+.final-cta h2 { font-size: clamp(26px, 5vw, 44px); font-weight: 900; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 14px; position: relative; }
+.final-cta h2 span { color: var(--pink); }
+.final-cta p { font-size: 15px; color: var(--muted); line-height: 1.75; margin-bottom: 40px; position: relative; }
+.final-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+.divider { height: 0.5px; background: var(--border); }
+footer { padding: 28px 24px; text-align: center; border-top: 0.5px solid var(--border); font-size: 12px; color: var(--muted2); line-height: 1.8; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 560px) {
+  .menu-grid, .ba-grid, .review-grid { grid-template-columns: 1fr; }
+  .specialist-card { flex-direction: column; align-items: center; text-align: center; }
+  .float-cta { width: calc(100% - 32px); }
+  .float-btn { flex: 1; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="float-cta">
+  <button class="float-btn kakao" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">💬 카카오 예약</button>
+  <button class="float-btn call" onclick="window.location.href='tel:010-0000-0000'">📞 당일 예약</button>
+</div>
+
+<nav>
+  <div class="nav-logo">○○<span>피부샵</span></div>
+  <a href="#booking" class="nav-cta">당일 예약 →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">✨ 당일 예약 가능 · 네이버 리뷰 4.9점</div>
+  <h1>피부 고민<br><span class="accent">딱 맞는 시술</span>로<br>해결합니다</h1>
+  <p><strong>트러블·미백·탄력·모공</strong> 고민별 맞춤 시술.<br>첫 방문 <strong>20% 할인</strong> 적용됩니다.</p>
+  <div class="hero-btns">
+    <button class="btn-main" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">✨ 시술 메뉴 보기</button>
+    <button class="btn-sub" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">당일 예약 신청</button>
+  </div>
+  <div class="trust-bar">
+    <div class="trust-item"><div class="trust-num">4.9점</div><div class="trust-label">네이버 리뷰</div></div>
+    <div class="trust-item"><div class="trust-num">3,600+</div><div class="trust-label">누적 시술 건수</div></div>
+    <div class="trust-item"><div class="trust-num">당일</div><div class="trust-label">예약 가능</div></div>
+    <div class="trust-item"><div class="trust-num">20%</div><div class="trust-label">첫 방문 할인</div></div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="section" id="menu">
+  <p class="sec-label reveal">시술 메뉴</p>
+  <h2 class="sec-title reveal">피부 고민을 선택하면<br>맞는 시술이 보입니다</h2>
+  <p class="sec-desc reveal">고민별로 필터링해서 딱 맞는 시술을 찾아보세요</p>
+
+  <div class="concern-filter reveal">
+    <button class="concern-btn active" data-filter="all">전체</button>
+    <button class="concern-btn" data-filter="trouble">트러블·여드름</button>
+    <button class="concern-btn" data-filter="whitening">미백·칙칙함</button>
+    <button class="concern-btn" data-filter="lifting">탄력·리프팅</button>
+    <button class="concern-btn" data-filter="pore">모공·피지</button>
+  </div>
+
+  <div class="menu-grid" id="menuGrid">
+    <div class="menu-card" data-concern="trouble">
+      <div class="menu-img">🌿
+        <span class="menu-tag">트러블</span>
+        <span class="menu-popular">🔥 인기</span>
+      </div>
+      <div class="menu-body">
+        <div class="menu-concern">트러블·여드름</div>
+        <div class="menu-name">진정 클렌징 케어</div>
+        <div class="menu-desc">민감하고 트러블 많은 피부를 진정시키고 피지 조절. 자극 없이 깨끗하게.</div>
+        <div class="menu-footer">
+          <span class="menu-price">₩65,000</span>
+          <span class="menu-time">⏱ 60분</span>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card" data-concern="trouble">
+      <div class="menu-img">💉
+        <span class="menu-tag">트러블</span>
+      </div>
+      <div class="menu-body">
+        <div class="menu-concern">트러블·여드름</div>
+        <div class="menu-name">여드름 압출 + 진정</div>
+        <div class="menu-desc">전문 압출 후 LED 진정 케어까지. 재발 방지 사후 관리 팁 제공.</div>
+        <div class="menu-footer">
+          <span class="menu-price">₩55,000</span>
+          <span class="menu-time">⏱ 50분</span>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card" data-concern="whitening">
+      <div class="menu-img">⭐
+        <span class="menu-tag">미백</span>
+        <span class="menu-popular">🔥 인기</span>
+      </div>
+      <div class="menu-body">
+        <div class="menu-concern">미백·칙칙함</div>
+        <div class="menu-name">비타민 브라이트닝</div>
+        <div class="menu-desc">고농도 비타민C 앰플로 칙칙한 피부톤 개선. 즉각적인 광채 효과.</div>
+        <div class="menu-footer">
+          <span class="menu-price">₩80,000</span>
+          <span class="menu-time">⏱ 70분</span>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card" data-concern="whitening">
+      <div class="menu-img">🌸
+        <span class="menu-tag">미백</span>
+      </div>
+      <div class="menu-body">
+        <div class="menu-concern">미백·칙칙함</div>
+        <div class="menu-name">색소 집중 관리</div>
+        <div class="menu-desc">기미·잡티·색소침착 집중 케어. IPL 기기를 활용한 정밀 시술.</div>
+        <div class="menu-footer">
+          <span class="menu-price">₩120,000</span>
+          <span class="menu-time">⏱ 60분</span>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card" data-concern="lifting">
+      <div class="menu-img">✨
+        <span class="menu-tag">탄력</span>
+        <span class="menu-popular">🔥 인기</span>
+      </div>
+      <div class="menu-body">
+        <div class="menu-concern">탄력·리프팅</div>
+        <div class="menu-name">콜라겐 리프팅</div>
+        <div class="menu-desc">콜라겐 재생을 촉진해 처진 피부를 탄탄하게. 즉각 리프팅 효과.</div>
+        <div class="menu-footer">
+          <span class="menu-price">₩130,000</span>
+          <span class="menu-time">⏱ 80분</span>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card" data-concern="lifting">
+      <div class="menu-img">💆‍♀️
+        <span class="menu-tag">탄력</span>
+      </div>
+      <div class="menu-body">
+        <div class="menu-concern">탄력·리프팅</div>
+        <div class="menu-name">V라인 윤곽 케어</div>
+        <div class="menu-desc">얼굴 윤곽 정리와 부기 제거. 갸름한 V라인으로 즉시 개선.</div>
+        <div class="menu-footer">
+          <span class="menu-price">₩95,000</span>
+          <span class="menu-time">⏱ 70분</span>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card" data-concern="pore">
+      <div class="menu-img">🔬
+        <span class="menu-tag">모공</span>
+        <span class="menu-popular">🔥 인기</span>
+      </div>
+      <div class="menu-body">
+        <div class="menu-concern">모공·피지</div>
+        <div class="menu-name">모공 딥클렌징</div>
+        <div class="menu-desc">피지와 블랙헤드를 깊숙이 제거. 모공 수축까지 한 번에 해결.</div>
+        <div class="menu-footer">
+          <span class="menu-price">₩70,000</span>
+          <span class="menu-time">⏱ 65분</span>
+        </div>
+      </div>
+    </div>
+    <div class="menu-card" data-concern="pore">
+      <div class="menu-img">💎
+        <span class="menu-tag">모공</span>
+      </div>
+      <div class="menu-body">
+        <div class="menu-concern">모공·피지</div>
+        <div class="menu-name">피지 조절 집중 케어</div>
+        <div class="menu-desc">과잉 피지를 조절하고 번들거림을 개선. 매끈한 피부결 완성.</div>
+        <div class="menu-footer">
+          <span class="menu-price">₩75,000</span>
+          <span class="menu-time">⏱ 60분</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BEFORE AFTER -->
+<section class="section">
+  <p class="sec-label reveal">시술 전후</p>
+  <h2 class="sec-title reveal">직접 오신 분들의<br>실제 변화입니다</h2>
+  <p class="sec-desc reveal">보정 없이, 실제 고객 사진입니다</p>
+
+  <div class="ba-grid">
+    <div class="ba-pair reveal">
+      <div class="ba-imgs">
+        <div class="ba-img">😔<span class="ba-label before">BEFORE</span></div>
+        <div class="ba-img" style="background:rgba(240,96,176,0.06)">😊<span class="ba-label after">AFTER</span></div>
+      </div>
+      <div class="ba-info">
+        <div class="ba-concern">트러블·여드름</div>
+        <div class="ba-result">진정 클렌징 3회 후</div>
+        <div class="ba-session">20대 · 3주 관리</div>
+      </div>
+    </div>
+    <div class="ba-pair reveal">
+      <div class="ba-imgs">
+        <div class="ba-img">😐<span class="ba-label before">BEFORE</span></div>
+        <div class="ba-img" style="background:rgba(240,96,176,0.06)">✨<span class="ba-label after">AFTER</span></div>
+      </div>
+      <div class="ba-info">
+        <div class="ba-concern">미백·칙칙함</div>
+        <div class="ba-result">비타민 브라이트닝 2회 후</div>
+        <div class="ba-session">30대 · 2주 관리</div>
+      </div>
+    </div>
+    <div class="ba-pair reveal">
+      <div class="ba-imgs">
+        <div class="ba-img">😟<span class="ba-label before">BEFORE</span></div>
+        <div class="ba-img" style="background:rgba(240,96,176,0.06)">💆<span class="ba-label after">AFTER</span></div>
+      </div>
+      <div class="ba-info">
+        <div class="ba-concern">탄력·리프팅</div>
+        <div class="ba-result">콜라겐 리프팅 4회 후</div>
+        <div class="ba-session">40대 · 1개월 관리</div>
+      </div>
+    </div>
+    <div class="ba-pair reveal">
+      <div class="ba-imgs">
+        <div class="ba-img">😕<span class="ba-label before">BEFORE</span></div>
+        <div class="ba-img" style="background:rgba(240,96,176,0.06)">😍<span class="ba-label after">AFTER</span></div>
+      </div>
+      <div class="ba-info">
+        <div class="ba-concern">모공·피지</div>
+        <div class="ba-result">모공 딥클렌징 2회 후</div>
+        <div class="ba-session">20대 · 2주 관리</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SPECIALIST -->
+<section class="section">
+  <p class="sec-label reveal">담당 에스테티션</p>
+  <h2 class="sec-title reveal">자격증 보유 전문가가<br>직접 케어합니다</h2>
+
+  <div style="display:flex; flex-direction:column; gap:14px;">
+    <div class="specialist-card reveal">
+      <div class="sp-avatar">👩‍⚕️</div>
+      <div class="sp-info">
+        <div class="sp-name">김○○ 원장</div>
+        <div class="sp-title">피부미용사 국가자격증 · 경력 12년</div>
+        <div class="sp-tags">
+          <span class="sp-tag">국가자격증</span>
+          <span class="sp-tag">트러블 전문</span>
+          <span class="sp-tag">리프팅 특화</span>
+        </div>
+        <ul class="sp-career">
+          <li><span class="sp-dot"></span>피부미용사 국가자격증 취득</li>
+          <li><span class="sp-dot"></span>○○피부과 협력 에스테티션 7년</li>
+          <li><span class="sp-dot"></span>대한피부미용사협회 정회원</li>
+          <li><span class="sp-dot"></span>트러블·민감성 피부 케어 전문</li>
+        </ul>
+      </div>
+    </div>
+    <div class="specialist-card reveal">
+      <div class="sp-avatar">👩</div>
+      <div class="sp-info">
+        <div class="sp-name">이○○ 에스테티션</div>
+        <div class="sp-title">피부미용사 국가자격증 · 경력 8년</div>
+        <div class="sp-tags">
+          <span class="sp-tag">국가자격증</span>
+          <span class="sp-tag">미백 전문</span>
+          <span class="sp-tag">모공 특화</span>
+        </div>
+        <ul class="sp-career">
+          <li><span class="sp-dot"></span>피부미용사 국가자격증 취득</li>
+          <li><span class="sp-dot"></span>미백·색소 시술 집중 전문</li>
+          <li><span class="sp-dot"></span>모공·피지 케어 1,200건+ 시술</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REVIEWS -->
+<section class="section">
+  <p class="sec-label reveal">방문 후기</p>
+  <h2 class="sec-title reveal">직접 오신 분들의<br>솔직한 이야기</h2>
+
+  <div class="review-grid">
+    <div class="review-card reveal">
+      <div class="r-stars">★★★★★</div>
+      <p class="r-text">여드름 때문에 오래 고민했는데 3번 받고 나서 확실히 줄었어요. 자극 없이 진정시켜줘서 민감한 제 피부에 딱 맞았습니다.</p>
+      <div class="r-author">
+        <div class="r-avatar">박</div>
+        <div><div class="r-name">박○○ 님</div><div class="r-tag">20대 · 트러블 케어</div></div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="r-stars">★★★★★</div>
+      <p class="r-text">피부톤이 너무 칙칙해서 왔는데 한 번 받고 주변에서 다들 피부 좋아졌다고 하더라고요. 광채가 나는 느낌이 너무 좋아요.</p>
+      <div class="r-author">
+        <div class="r-avatar">이</div>
+        <div><div class="r-name">이○○ 님</div><div class="r-tag">30대 · 미백 케어</div></div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="r-stars">★★★★★</div>
+      <p class="r-text">40대라 탄력이 많이 떨어졌는데 리프팅 시술 후 확실히 당겨진 느낌이에요. 원장님이 꼼꼼하게 설명해주셔서 믿음이 갔어요.</p>
+      <div class="r-author">
+        <div class="r-avatar">김</div>
+        <div><div class="r-name">김○○ 님</div><div class="r-tag">40대 · 리프팅 케어</div></div>
+      </div>
+    </div>
+    <div class="review-card reveal">
+      <div class="r-stars">★★★★★</div>
+      <p class="r-text">모공이 너무 커서 스스로도 스트레스였는데 딥클렌징 2번만에 확 달라졌어요. 당일 예약도 되고 시간도 잘 맞춰줘서 좋아요.</p>
+      <div class="r-author">
+        <div class="r-avatar">최</div>
+        <div><div class="r-name">최○○ 님</div><div class="r-tag">20대 · 모공 케어</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROCESS -->
+<section class="section">
+  <p class="sec-label reveal">예약 절차</p>
+  <h2 class="sec-title reveal">예약부터 시술까지<br>이렇게 진행됩니다</h2>
+
+  <div class="process-list">
+    <div class="process-item reveal">
+      <div class="proc-num">1</div>
+      <div class="proc-content">
+        <div class="proc-title">카카오 또는 전화로 예약</div>
+        <p class="proc-desc">원하는 시술과 날짜를 알려주시면 바로 예약 확정해 드립니다. 당일 예약도 가능합니다.</p>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="proc-num">2</div>
+      <div class="proc-content">
+        <div class="proc-title">피부 상태 1:1 상담</div>
+        <p class="proc-desc">방문 후 피부 상태를 꼼꼼히 체크하고 가장 적합한 시술을 추천드립니다.</p>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="proc-num">3</div>
+      <div class="proc-content">
+        <div class="proc-title">맞춤 시술 진행</div>
+        <p class="proc-desc">담당 에스테티션이 처음부터 끝까지 1:1로 케어합니다. 중간에 불편하면 바로 조정합니다.</p>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="proc-num">4</div>
+      <div class="proc-content">
+        <div class="proc-title">사후 관리 안내</div>
+        <p class="proc-desc">시술 후 홈케어 방법과 주의사항을 자세히 알려드립니다. 궁금한 점은 카카오로 언제든 문의 가능합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section class="section">
+  <p class="sec-label reveal">자주 묻는 질문</p>
+  <h2 class="sec-title reveal">궁금한 점이 있으신가요?</h2>
+
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">당일 예약이 가능한가요?<span class="faq-icon">+</span></button>
+      <div class="faq-a">네, 당일 예약 가능합니다. 카카오 채널이나 전화로 빈 시간을 확인하시고 바로 예약하실 수 있습니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">민감성 피부도 시술이 가능한가요?<span class="faq-icon">+</span></button>
+      <div class="faq-a">가능합니다. 방문 전 카카오로 피부 상태를 미리 말씀해 주시면 민감성 피부에 맞는 시술을 추천드립니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">시술 후 바로 메이크업이 가능한가요?<span class="faq-icon">+</span></button>
+      <div class="faq-a">시술 종류에 따라 다릅니다. 일반 케어는 당일 가능하지만 압출·레이저 시술 후에는 24시간 메이크업을 자제해 주셔야 합니다. 시술 시 자세히 안내드립니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">첫 방문 할인은 어떻게 적용되나요?<span class="faq-icon">+</span></button>
+      <div class="faq-a">첫 방문 시 전 시술 20% 할인이 자동 적용됩니다. 예약 시 첫 방문이라고 말씀해 주세요.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">몇 회 받아야 효과가 나타나나요?<span class="faq-icon">+</span></button>
+      <div class="faq-a">시술 종류와 피부 상태에 따라 다르지만 평균 2~3회부터 눈에 띄는 변화를 경험하십니다. 상담 시 예상 횟수를 안내드립니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="booking">
+  <h2 class="reveal">오늘 바로<br><span>당일 예약</span> 하세요</h2>
+  <p class="reveal">첫 방문 20% 할인 적용 · 부담 없이 상담부터<br>카카오로 편하게 문의해 주세요</p>
+  <div class="final-btns">
+    <button class="btn-main reveal" onclick="window.open('https://open.kakao.com/YOUR_LINK','_blank')">💬 카카오로 예약하기</button>
+    <button class="btn-sub reveal" onclick="window.location.href='tel:010-0000-0000'">📞 전화 예약</button>
+  </div>
+</section>
+
+<footer>
+  ○○피부샵 · 대표 김○○ · 사업자등록번호 000-00-00000<br>
+  서울시 ○○구 ○○로 000 · Tel. 010-0000-0000<br>
+  © 2025 ○○피부샵. All rights reserved.
+</footer>
+
+<script>
+// 피부 고민 필터
+document.querySelectorAll('.concern-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.concern-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.menu-card').forEach(card => {
+      card.classList.toggle('hidden', f !== 'all' && card.dataset.concern !== f);
+    });
+  });
+});
+
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

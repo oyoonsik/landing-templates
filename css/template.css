@@ -141,11 +141,6 @@ nav {
 .mock-section { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .mock-block { height: 32px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 0.5px solid rgba(255,255,255,0.08); }
 
-.thumb-hospital { background: #0F1520; }
-.thumb-diet     { background: #0E1A14; }
-.thumb-academy  { background: #14100E; }
-.thumb-estate   { background: #0E1118; }
-.thumb-beauty   { background: #1A0E18; }
 
 .card-body { padding: 20px 22px 22px; }
 .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }

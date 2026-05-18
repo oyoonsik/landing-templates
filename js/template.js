@@ -12,13 +12,42 @@ const cards = [
 
 let currentCard = null;
 
+/* ── Supabase 설정 및 초기화 ── */
+const SUPABASE_URL = 'https://jcwdodfiunuorqmekepw.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impjd2RvZGZpdW51b3JxbWVrZXB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDIwOTAsImV4cCI6MjA5NDYxODA5MH0.t_hDaSsqIYSV2BrQeQvEzf9Wqv8sD8Jvz1GHuwnGGyo';
+const TABLE = 'consultations';
+
+// HTML에서 글로벌 supabase 스크립트가 정상적으로 로드되었는지 확인 후 초기화
+const _db = (typeof supabase !== 'undefined') ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
 /* ══════════════════════════════════════════════
-   TODO: DB 연동 시 이 함수 하나만 채우면 됩니다
-   예) Supabase, Google Sheets, Notion 등
+   DB 연동: Supabase 실데이터 저장 함수
 ══════════════════════════════════════════════ */
 async function saveLead(payload) {
   console.log('[리드 수집]', payload);
-  await new Promise(r => setTimeout(r, 700)); // 로딩 효과용 딜레이만 있음
+
+  if (!_db) {
+    console.error('Supabase 라이브러리가 로드되지 않았습니다. CDN 링크를 확인하세요.');
+    throw new Error('Supabase 미설치');
+  }
+
+  // 데이터베이스 테이블 컬럼 구조에 맞게 매핑하여 데이터 삽입
+  const { data, error } = await _db.from(TABLE).insert({
+    name: payload.name,
+    phone: payload.phone,
+    email: payload.email || null,
+    // 템플릿 신청인 경우 업종 태그를 넣고, 모달 문의인 경우 type(consult/package)을 저장 (없으면 'general')
+    industry: payload.template_category || payload.type || 'general',
+    status: 'wait',
+    memo: payload.template_title ? `[템플릿 신청] ${payload.template_title}` : `[일반 문의] ${payload.type === 'package' ? '전 업종 패키지' : '무료 상담'}`
+  });
+
+  if (error) {
+    console.error('Supabase 저장 오류:', error);
+    throw error;
+  }
+
+  return data;
 }
 
 /* ══════════════════════════════════════════════
@@ -73,7 +102,7 @@ async function saveLead(payload) {
         <button id="cta-submit" onclick="submitCta()" style="
           flex:1;background:#FF503C;color:#fff;border:none;border-radius:12px;
           padding:14px 20px;font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:700;
-          cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity 0.15s;
+          cursor:pointer;display:flex; align-items:center;justify-content:center;gap:8px;transition:opacity 0.15s;
         " onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
           <span id="cta-btn-text">신청하기</span>
           <div id="cta-spinner" style="display:none;width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;animation:spin 0.7s linear infinite;"></div>
@@ -136,7 +165,7 @@ async function submitCta() {
 
   if (!name)  { showCtaStatus('이름을 입력해 주세요.', 'error'); document.getElementById('cta-name').style.borderColor='rgba(255,80,60,0.6)'; return; }
   if (!phone || !/^[0-9\-+\s]{7,20}$/.test(phone)) { showCtaStatus('올바른 연락처를 입력해 주세요.', 'error'); document.getElementById('cta-phone').style.borderColor='rgba(255,80,60,0.6)'; return; }
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showCtaStatus('올바른 이메일 주소를 입력해 주세요.', 'error'); document.getElementById('cta-email').style.borderColor='rgba(255,80,60,0.6)'; return; }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showCtaStatus('올바른 이메일 주소를 입력해 주세요.', 'error'); document.getElementById('cta-phone').style.borderColor='rgba(255,80,60,0.6)'; return; }
 
   const btn = document.getElementById('cta-submit');
   btn.disabled = true;
@@ -195,6 +224,10 @@ function showStatus(msg, type) {
   const el = document.getElementById('form-status');
   el.textContent = msg;
   el.className = 'form-status ' + type;
+  
+  // 텍스트 컬러 매핑 제어 추가
+  el.style.color = type === 'error' ? '#FF503C' : type === 'success' ? '#3DD68C' : '';
+  el.style.display = msg ? 'block' : 'none';
 }
 
 async function handleDownload() {
@@ -205,28 +238,35 @@ async function handleDownload() {
   const btn = document.getElementById('m-cta');
   btn.disabled = true;
   btn.classList.add('loading');
+  showStatus('', '');
 
   try {
+    // 수집된 실데이터를 Supabase DB에 인서트 요청
     await saveLead({
-      name: data.name, phone: data.phone, email: data.email || null,
-      template_title: currentCard.title, template_category: currentCard.tag,
+      name: data.name, 
+      phone: data.phone, 
+      email: data.email || null,
+      template_title: currentCard.title, 
+      template_category: currentCard.tag,
     });
 
-    showStatus('✓ 신청 완료! 다운로드 링크를 준비했습니다.', 'success');
-
-    /* 실제 파일 다운로드 — 경로 확인 후 주석 해제
-    const url = `template/${currentCard.cat}_0${currentCard.id + 1}.html`;
-    const a = document.createElement('a'); a.href = url; a.download = ''; a.click(); */
+    showStatus('✓ 신청 완료! 곧 연락드릴게요 😊', 'success');
 
     btn.innerHTML = '<span class="btn-text">✓ 완료</span>';
     btn.style.background = '#3DD68C';
+    
+    // 2초 후 모달 닫기 및 폼 리셋
     setTimeout(() => {
+      document.getElementById('modal').classList.remove('open');
       btn.disabled = false;
       btn.classList.remove('loading');
       btn.innerHTML = '<span class="btn-text">무료 다운로드</span><div class="spinner"></div>';
       btn.style.background = '';
-    }, 3000);
-  } catch {
+      ['f-name', 'f-phone', 'f-email'].forEach(id => { document.getElementById(id).value = ''; });
+      showStatus('', '');
+    }, 2000);
+
+  } catch (err) {
     showStatus('오류가 발생했습니다. 다시 시도해 주세요.', 'error');
     btn.disabled = false;
     btn.classList.remove('loading');
@@ -250,7 +290,7 @@ function openModal(id) {
   btn.style.background = ''; btn.disabled = false; btn.classList.remove('loading');
 
   ['f-name','f-phone','f-email'].forEach(id => { const el = document.getElementById(id); el.value = ''; el.classList.remove('error'); });
-  const st = document.getElementById('form-status'); st.className = 'form-status'; st.textContent = '';
+  const st = document.getElementById('form-status'); st.className = 'form-status'; st.textContent = ''; st.style.display = 'none';
 
   document.getElementById('modal').classList.add('open');
 }
@@ -260,26 +300,29 @@ function closeModal(e) {
     document.getElementById('modal').classList.remove('open');
 }
 
-document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('click', () => openModal(+card.dataset.id));
-});
-
-document.querySelectorAll('.card-dl-btn').forEach(btn => {
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    const url = btn.dataset.preview;
-    if (url) window.open(url, '_blank');
-    else openModal(+btn.closest('.card').dataset.id);
+// 초기 이벤트 바인딩
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => openModal(+card.dataset.id));
   });
-});
 
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const f = btn.dataset.filter;
-    document.querySelectorAll('.card').forEach(c => {
-      c.classList.toggle('hidden', f !== 'all' && c.dataset.cat !== f);
+  document.querySelectorAll('.card-dl-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const url = btn.dataset.preview;
+      if (url) window.open(url, '_blank');
+      else openModal(+btn.closest('.card').dataset.id);
+    });
+  });
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('.card').forEach(c => {
+        c.classList.toggle('hidden', f !== 'all' && c.dataset.cat !== f);
+      });
     });
   });
 });

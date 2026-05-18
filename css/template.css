@@ -334,3 +334,26 @@ footer { border-top: 0.5px solid var(--border); padding: 32px 24px; text-align: 
   .modal { padding: 28px 22px; }
   .modal-actions { flex-direction: column; }
 }
+
+/* 디비쪽 연동 폼 */
+.lead-form-section { margin-top: 20px; padding-top: 20px; border-top: 0.5px solid rgba(255,255,255,0.1); }
+.lead-form-label { font-size: 12px; font-weight: 600; color: #FF503C; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+.lead-form-label::before { content: ''; display: inline-block; width: 3px; height: 12px; background: #FF503C; border-radius: 2px; }
+.form-fields { display: flex; flex-direction: column; gap: 10px; }
+.form-field label { display: block; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6); margin-bottom: 5px; }
+.form-field input {
+  width: 100%; background: rgba(255,255,255,0.05);
+  border: 0.5px solid rgba(255,255,255,0.15);
+  border-radius: 8px; color: #fff;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; padding: 10px 14px; outline: none;
+  transition: border-color 0.15s;
+}
+.form-field input::placeholder { color: rgba(255,255,255,0.25); }
+.form-field input:focus { border-color: rgba(255,80,60,0.5); }
+.form-status { font-size: 13px; font-weight: 500; min-height: 18px; }
+.btn-modal-main { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+.btn-modal-main.loading .btn-text { opacity: 0.7; }
+.btn-modal-main.loading .spinner { display: block; }
+@keyframes spin { to { transform: rotate(360deg); } }

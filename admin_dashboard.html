@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>상담 신청 관리자</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0D0D0D;
+  --surface: #141414;
+  --surface2: #1C1C1C;
+  --surface3: #242424;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #F0F0F0;
+  --muted: rgba(240,240,240,0.45);
+  --muted2: rgba(240,240,240,0.25);
+  --accent: #FF503C;
+  --accent2: rgba(255,80,60,0.12);
+  --accent-border: rgba(255,80,60,0.3);
+  --green: #3DD68C;
+  --green2: rgba(61,214,140,0.12);
+  --yellow: #FFD166;
+  --yellow2: rgba(255,209,102,0.12);
+  --blue: #4B9EF0;
+  --blue2: rgba(75,158,240,0.12);
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'Noto Sans KR', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+/* ── SIDEBAR ── */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 220px; flex-shrink: 0;
+  background: var(--surface);
+  border-right: 0.5px solid var(--border);
+  display: flex; flex-direction: column;
+  position: fixed; top: 0; left: 0; bottom: 0;
+  z-index: 50;
+}
+
+.sidebar-logo {
+  padding: 22px 20px 18px;
+  border-bottom: 0.5px solid var(--border);
+}
+.logo-title {
+  font-family: var(--mono); font-size: 13px; font-weight: 600;
+  letter-spacing: 0.04em; color: var(--text);
+}
+.logo-sub { font-size: 10px; color: var(--muted); margin-top: 3px; font-family: var(--mono); }
+
+.sidebar-nav { flex: 1; padding: 16px 10px; display: flex; flex-direction: column; gap: 2px; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; color: var(--muted);
+  cursor: pointer; transition: all 0.15s; border: none; background: none;
+  width: 100%; text-align: left; font-family: var(--sans);
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { background: var(--accent2); color: var(--accent); border: 0.5px solid var(--accent-border); }
+.nav-icon { font-size: 15px; flex-shrink: 0; }
+
+.sidebar-bottom {
+  padding: 16px 10px;
+  border-top: 0.5px solid var(--border);
+}
+.version-tag {
+  font-family: var(--mono); font-size: 10px; color: var(--muted2);
+  text-align: center;
+}
+
+/* ── MAIN ── */
+.main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; }
+
+/* ── TOPBAR ── */
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  height: 56px; padding: 0 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(13,13,13,0.9); backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+}
+.topbar-title { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.topbar-date { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--sans); font-size: 12px; font-weight: 600;
+  padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { opacity: 0.88; }
+.btn-ghost {
+  background: var(--surface2); color: var(--muted);
+  border: 0.5px solid var(--border2);
+}
+.btn-ghost:hover { color: var(--text); border-color: var(--border2); }
+
+/* ── CONTENT ── */
+.content { padding: 28px; flex: 1; }
+
+/* ── STAT CARDS ── */
+.stat-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 20px 22px;
+  transition: border-color 0.2s;
+}
+.stat-card:hover { border-color: var(--border2); }
+.stat-label { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
+.stat-num { font-family: var(--mono); font-size: 30px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; margin-bottom: 8px; }
+.stat-num.red    { color: var(--accent); }
+.stat-num.green  { color: var(--green); }
+.stat-num.yellow { color: var(--yellow); }
+.stat-num.blue   { color: var(--blue); }
+.stat-change { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+.stat-up   { color: var(--green); }
+.stat-down { color: var(--accent); }
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 18px; flex-wrap: wrap;
+}
+.search-wrap { position: relative; flex: 1; min-width: 200px; }
+.search-input {
+  width: 100%; background: var(--surface); border: 0.5px solid var(--border2);
+  border-radius: 8px; color: var(--text); font-family: var(--sans);
+  font-size: 13px; padding: 9px 14px 9px 36px;
+  outline: none; transition: border-color 0.15s;
+}
+.search-input::placeholder { color: var(--muted2); }
+.search-input:focus { border-color: var(--accent-border); }
+.search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 14px; color: var(--muted);
+}
+.filter-select {
+  background: var(--surface); border: 0.5px solid var(--border2);
+  border-radius: 8px; color: var(--text); font-family: var(--sans);
+  font-size: 12px; padding: 9px 14px; outline: none; cursor: pointer;
+  transition: border-color 0.15s; appearance: none;
+}
+.filter-select:focus { border-color: var(--accent-border); }
+
+/* ── TABLE ── */
+.table-wrap {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+}
+.table-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 22px; border-bottom: 0.5px solid var(--border);
+}
+.table-title { font-size: 13px; font-weight: 700; }
+.table-count { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: var(--surface2); }
+th {
+  padding: 12px 18px; text-align: left;
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  border-bottom: 0.5px solid var(--border);
+  white-space: nowrap; cursor: pointer; user-select: none;
+}
+th:hover { color: var(--text); }
+.th-sort { display: inline-flex; align-items: center; gap: 4px; }
+
+tbody tr {
+  border-bottom: 0.5px solid var(--border);
+  transition: background 0.12s; cursor: pointer;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface2); }
+
+td { padding: 14px 18px; font-size: 13px; vertical-align: middle; }
+
+.td-name { font-weight: 600; }
+.td-phone {
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+}
+.td-date {
+  font-family: var(--mono); font-size: 11px; color: var(--muted2);
+  white-space: nowrap;
+}
+
+/* INDUSTRY BADGE */
+.badge {
+  display: inline-flex; align-items: center;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 10px; border-radius: 100px;
+  white-space: nowrap;
+}
+.badge-hospital { background: rgba(75,158,240,0.12); color: #4B9EF0; border: 0.5px solid rgba(75,158,240,0.25); }
+.badge-diet     { background: rgba(61,214,140,0.12);  color: #3DD68C; border: 0.5px solid rgba(61,214,140,0.25); }
+.badge-academy  { background: rgba(180,130,255,0.12); color: #B482FF; border: 0.5px solid rgba(180,130,255,0.25); }
+.badge-estate   { background: rgba(45,212,191,0.12);  color: #2DD4BF; border: 0.5px solid rgba(45,212,191,0.25); }
+.badge-beauty   { background: rgba(240,96,176,0.12);  color: #F060B0; border: 0.5px solid rgba(240,96,176,0.25); }
+.badge-pt       { background: rgba(255,107,43,0.12);  color: #FF6B2B; border: 0.5px solid rgba(255,107,43,0.25); }
+
+/* STATUS BADGE */
+.status {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600;
+  padding: 4px 10px; border-radius: 100px;
+}
+.status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
+.status-wait   { background: var(--yellow2); color: var(--yellow); border: 0.5px solid rgba(255,209,102,0.3); }
+.status-wait::before   { background: var(--yellow); animation: blink 1.4s infinite; }
+.status-done   { background: var(--green2);  color: var(--green);  border: 0.5px solid rgba(61,214,140,0.3); }
+.status-done::before   { background: var(--green); }
+.status-cancel { background: var(--surface3); color: var(--muted); border: 0.5px solid var(--border2); }
+.status-cancel::before { background: var(--muted); }
+
+/* ROW ACTIONS */
+.row-actions { display: flex; align-items: center; gap: 6px; opacity: 0; transition: opacity 0.15s; }
+tbody tr:hover .row-actions { opacity: 1; }
+.action-btn {
+  font-size: 11px; font-weight: 600;
+  padding: 4px 10px; border-radius: 6px; border: 0.5px solid var(--border2);
+  background: var(--surface3); color: var(--muted); cursor: pointer;
+  font-family: var(--sans); transition: all 0.12s;
+}
+.action-btn:hover { color: var(--text); border-color: var(--border2); }
+.action-btn.call:hover { color: var(--green); border-color: rgba(61,214,140,0.3); background: var(--green2); }
+.action-btn.done:hover { color: var(--accent); border-color: var(--accent-border); background: var(--accent2); }
+
+/* ── PAGINATION ── */
+.pagination {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px; border-top: 0.5px solid var(--border);
+}
+.page-info { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.page-btns { display: flex; gap: 4px; }
+.page-btn {
+  width: 30px; height: 30px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  border: 0.5px solid var(--border); background: var(--surface2);
+  color: var(--muted); font-family: var(--mono); transition: all 0.12s;
+}
+.page-btn:hover { color: var(--text); border-color: var(--border2); }
+.page-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ── DETAIL DRAWER ── */
+.drawer-bg {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+}
+.drawer-bg.open { display: block; }
+.drawer {
+  position: fixed; top: 0; right: -420px; bottom: 0; width: 420px; z-index: 201;
+  background: var(--surface); border-left: 0.5px solid var(--border2);
+  display: flex; flex-direction: column;
+  transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+}
+.drawer.open { right: 0; }
+.drawer-header {
+  padding: 22px 24px 18px;
+  border-bottom: 0.5px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; background: var(--surface); z-index: 1;
+}
+.drawer-title { font-size: 15px; font-weight: 700; }
+.drawer-close {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--surface2); border: 0.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; color: var(--muted);
+  transition: all 0.12s;
+}
+.drawer-close:hover { color: var(--text); }
+.drawer-body { padding: 24px; flex: 1; }
+.drawer-section { margin-bottom: 28px; }
+.drawer-section-title {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 14px; padding-bottom: 8px;
+  border-bottom: 0.5px solid var(--border);
+}
+.detail-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 10px 0; border-bottom: 0.5px solid var(--border);
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-label { font-size: 12px; color: var(--muted); flex-shrink: 0; margin-right: 16px; }
+.detail-value { font-size: 13px; font-weight: 500; text-align: right; }
+.detail-value.mono { font-family: var(--mono); font-size: 12px; }
+
+.memo-area {
+  width: 100%; background: var(--surface2); border: 0.5px solid var(--border2);
+  border-radius: 10px; color: var(--text); font-family: var(--sans);
+  font-size: 13px; padding: 12px 14px; outline: none; resize: none;
+  height: 90px; line-height: 1.6; transition: border-color 0.15s;
+}
+.memo-area::placeholder { color: var(--muted2); }
+.memo-area:focus { border-color: var(--accent-border); }
+
+.drawer-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.drawer-btn {
+  width: 100%; padding: 13px; border-radius: 10px; border: none;
+  font-family: var(--sans); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: opacity 0.15s;
+}
+.drawer-btn.call-btn { background: var(--green); color: #0A1A0C; }
+.drawer-btn.done-btn { background: var(--accent); color: #fff; }
+.drawer-btn.cancel-btn { background: var(--surface3); color: var(--muted); border: 0.5px solid var(--border2); }
+.drawer-btn:hover { opacity: 0.88; }
+
+/* ── CHART SECTION ── */
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
+.chart-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: 14px; padding: 20px 22px;
+}
+.chart-title { font-size: 12px; font-weight: 700; margin-bottom: 18px; }
+
+/* mini bar chart */
+.bar-chart { display: flex; flex-direction: column; gap: 10px; }
+.bar-row { display: flex; align-items: center; gap: 10px; }
+.bar-label { font-size: 11px; color: var(--muted); width: 60px; flex-shrink: 0; }
+.bar-track { flex: 1; height: 8px; background: var(--surface3); border-radius: 100px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 100px; transition: width 1s ease; }
+.bar-val { font-family: var(--mono); font-size: 11px; color: var(--muted); width: 24px; text-align: right; flex-shrink: 0; }
+
+/* donut chart */
+.donut-wrap { display: flex; align-items: center; gap: 20px; }
+.donut-svg { flex-shrink: 0; }
+.donut-legend { display: flex; flex-direction: column; gap: 8px; }
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.legend-label { font-size: 11px; color: var(--muted); }
+.legend-val { font-family: var(--mono); font-size: 11px; color: var(--text); margin-left: auto; }
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+/* EMPTY */
+.empty-state {
+  padding: 60px 24px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.empty-icon { font-size: 40px; opacity: 0.3; }
+.empty-text { font-size: 14px; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .sidebar { width: 56px; }
+  .nav-item span, .logo-title, .logo-sub, .sidebar-bottom { display: none; }
+  .main { margin-left: 56px; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .chart-grid { grid-template-columns: 1fr; }
+  .drawer { width: 100%; right: -100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-title">ADMIN</div>
+    <div class="logo-sub">상담 신청 관리</div>
+  </div>
+  <nav class="sidebar-nav">
+    <button class="nav-item active" onclick="switchTab('dashboard')">
+      <span class="nav-icon">📊</span>
+      <span>대시보드</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('list')">
+      <span class="nav-icon">📋</span>
+      <span>신청 목록</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('stats')">
+      <span class="nav-icon">📈</span>
+      <span>통계</span>
+    </button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="version-tag">v1.0.0</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">대시보드</div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="topbar-date"></div>
+      <button class="btn btn-ghost" onclick="exportCSV()">⬇ CSV 내보내기</button>
+      <button class="btn btn-primary" onclick="addDummy()">+ 테스트 데이터 추가</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- STAT CARDS -->
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">전체 신청</div>
+        <div class="stat-num blue" id="stat-total">0</div>
+        <div class="stat-change">누적 신청 건수</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">대기 중</div>
+        <div class="stat-num yellow" id="stat-wait">0</div>
+        <div class="stat-change">연락 필요</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">상담 완료</div>
+        <div class="stat-num green" id="stat-done">0</div>
+        <div class="stat-change">처리 완료</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">오늘 신청</div>
+        <div class="stat-num red" id="stat-today">0</div>
+        <div class="stat-change">금일 기준</div>
+      </div>
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="searchInput" placeholder="이름 또는 연락처 검색..." oninput="renderTable()">
+      </div>
+      <select class="filter-select" id="filterIndustry" onchange="renderTable()">
+        <option value="all">전체 업종</option>
+        <option value="hospital">병원·의원</option>
+        <option value="diet">다이어트</option>
+        <option value="pt">헬스·PT</option>
+        <option value="academy">학원·교육</option>
+        <option value="estate">부동산</option>
+        <option value="beauty">피부·뷰티</option>
+      </select>
+      <select class="filter-select" id="filterStatus" onchange="renderTable()">
+        <option value="all">전체 상태</option>
+        <option value="wait">대기 중</option>
+        <option value="done">완료</option>
+        <option value="cancel">취소</option>
+      </select>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-title">신청 목록</div>
+        <div class="table-count" id="table-count">0건</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th><span class="th-sort">이름 ↕</span></th>
+            <th>연락처</th>
+            <th>업종</th>
+            <th>신청 날짜</th>
+            <th>상태</th>
+            <th>액션</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div id="emptyState" class="empty-state" style="display:none">
+        <div class="empty-icon">📭</div>
+        <div class="empty-text">신청 데이터가 없습니다</div>
+      </div>
+      <div class="pagination">
+        <div class="page-info" id="pageInfo">0 - 0 / 0건</div>
+        <div class="page-btns" id="pageBtns"></div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">업종별 신청 현황</div>
+        <div class="bar-chart" id="barChart"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">상태 비율</div>
+        <div class="donut-wrap">
+          <svg class="donut-svg" width="100" height="100" viewBox="0 0 100 100" id="donutSvg">
+            <circle cx="50" cy="50" r="36" fill="none" stroke="#242424" stroke-width="14"/>
+          </svg>
+          <div class="donut-legend" id="donutLegend"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+</div>
+
+<!-- DETAIL DRAWER -->
+<div class="drawer-bg" id="drawerBg" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="drawer-title">신청자 상세</div>
+    <div class="drawer-close" onclick="closeDrawer()">✕</div>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-section">
+      <div class="drawer-section-title">기본 정보</div>
+      <div class="detail-row"><span class="detail-label">이름</span><span class="detail-value" id="d-name">—</span></div>
+      <div class="detail-row"><span class="detail-label">연락처</span><span class="detail-value mono" id="d-phone">—</span></div>
+      <div class="detail-row"><span class="detail-label">이메일</span><span class="detail-value mono" id="d-email">—</span></div>
+      <div class="detail-row"><span class="detail-label">업종</span><span class="detail-value" id="d-industry">—</span></div>
+      <div class="detail-row"><span class="detail-label">신청일</span><span class="detail-value mono" id="d-date">—</span></div>
+      <div class="detail-row"><span class="detail-label">상태</span><span class="detail-value" id="d-status">—</span></div>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-section-title">메모</div>
+      <textarea class="memo-area" id="d-memo" placeholder="상담 메모를 입력하세요..."></textarea>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-section-title">액션</div>
+      <div class="drawer-actions">
+        <button class="drawer-btn call-btn" id="d-call-btn">📞 전화 연결</button>
+        <button class="drawer-btn done-btn" onclick="setStatus('done')">✓ 상담 완료 처리</button>
+        <button class="drawer-btn cancel-btn" onclick="setStatus('cancel')">✕ 취소 처리</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── SUPABASE 설정 ──
+const SUPABASE_URL = 'https://jcwdodfiunuorqmekepw.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impjd2RvZGZpdW51b3JxbWVrZXB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDIwOTAsImV4cCI6MjA5NDYxODA5MH0.t_hDaSsqIYSV2BrQeQvEzf9Wqv8sD8Jvz1GHuwnGGyo';
+const TABLE = '상담'; // Supabase 테이블 이름
+
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── 상태 ──
+let data = [];
+let currentPage = 1;
+const PER_PAGE = 10;
+let selectedId = null;
+
+const INDUSTRIES = {
+  hospital: { label: '병원·의원', cls: 'badge-hospital' },
+  diet:     { label: '다이어트',  cls: 'badge-diet' },
+  pt:       { label: '헬스·PT',  cls: 'badge-pt' },
+  academy:  { label: '학원·교육', cls: 'badge-academy' },
+  estate:   { label: '부동산',    cls: 'badge-estate' },
+  beauty:   { label: '피부·뷰티', cls: 'badge-beauty' },
+};
+const STATUSES = {
+  wait:   { label: '대기 중', cls: 'status-wait' },
+  done:   { label: '완료',   cls: 'status-done' },
+  cancel: { label: '취소',   cls: 'status-cancel' },
+};
+
+// ── DB 함수 ──
+async function loadData() {
+  showLoading(true);
+  const { data: rows, error } = await db
+    .from(TABLE)
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) { alert('데이터 로딩 실패: ' + error.message); showLoading(false); return; }
+  data = rows.map(r => ({
+    id: r.id, name: r.name, phone: r.phone,
+    email: r.email || '', industry: r.industry || '',
+    status: r.status || 'wait', memo: r.memo || '',
+    createdAt: r.created_at,
+  }));
+  showLoading(false);
+  refresh();
+}
+
+async function updateRow(id, fields) {
+  const { error } = await db.from(TABLE).update(fields).eq('id', id);
+  if (error) alert('업데이트 실패: ' + error.message);
+  else await loadData();
+}
+
+// 실시간 구독
+db.channel('consultations-realtime')
+  .on('postgres_changes', { event: '*', schema: 'public', table: TABLE }, () => loadData())
+  .subscribe();
+
+// ── UI ──
+function showLoading(on) {
+  const empty = document.getElementById('emptyState');
+  if (on) { empty.style.display = 'flex'; empty.innerHTML = '<div class="empty-icon">⏳</div><div class="empty-text">데이터 불러오는 중...</div>'; }
+}
+
+function getFiltered() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const fi = document.getElementById('filterIndustry').value;
+  const fs = document.getElementById('filterStatus').value;
+  return data.filter(r => {
+    const matchQ = !q || (r.name||'').includes(q) || (r.phone||'').includes(q);
+    const matchI = fi === 'all' || r.industry === fi;
+    const matchS = fs === 'all' || r.status === fs;
+    return matchQ && matchI && matchS;
+  });
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  const pad = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function renderTable() {
+  const filtered = getFiltered();
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  const start = (currentPage - 1) * PER_PAGE;
+  const slice = filtered.slice(start, start + PER_PAGE);
+
+  document.getElementById('table-count').textContent = `${total}건`;
+  document.getElementById('pageInfo').textContent = `${total === 0 ? 0 : start+1} - ${Math.min(start+PER_PAGE, total)} / ${total}건`;
+
+  const tbody = document.getElementById('tableBody');
+  const empty = document.getElementById('emptyState');
+
+  if (slice.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'flex';
+    empty.innerHTML = '<div class="empty-icon">📭</div><div class="empty-text">신청 데이터가 없습니다</div>';
+  } else {
+    empty.style.display = 'none';
+    tbody.innerHTML = slice.map(r => {
+      const ind = INDUSTRIES[r.industry] || { label: r.industry || '기타', cls: '' };
+      const st  = STATUSES[r.status]    || { label: r.status, cls: '' };
+      return `
+        <tr onclick="openDrawer('${r.id}')">
+          <td class="td-name">${r.name || '—'}</td>
+          <td class="td-phone">${r.phone || '—'}</td>
+          <td><span class="badge ${ind.cls}">${ind.label}</span></td>
+          <td class="td-date">${fmtDate(r.createdAt)}</td>
+          <td><span class="status ${st.cls}">${st.label}</span></td>
+          <td>
+            <div class="row-actions" onclick="event.stopPropagation()">
+              <button class="action-btn call" onclick="callPhone('${r.phone}')">📞 전화</button>
+              <button class="action-btn done" onclick="quickDone('${r.id}')">✓ 완료</button>
+            </div>
+          </td>
+        </tr>`;
+    }).join('');
+  }
+
+  const pb = document.getElementById('pageBtns');
+  pb.innerHTML = '';
+  for (let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+    btn.textContent = i;
+    btn.onclick = () => { currentPage = i; renderTable(); };
+    pb.appendChild(btn);
+  }
+}
+
+function updateStats() {
+  const today = new Date().toDateString();
+  document.getElementById('stat-total').textContent = data.length;
+  document.getElementById('stat-wait').textContent  = data.filter(r => r.status === 'wait').length;
+  document.getElementById('stat-done').textContent  = data.filter(r => r.status === 'done').length;
+  document.getElementById('stat-today').textContent = data.filter(r => new Date(r.createdAt).toDateString() === today).length;
+}
+
+function renderCharts() {
+  const bar = document.getElementById('barChart');
+  const colors = { hospital:'#4B9EF0', diet:'#3DD68C', pt:'#FF6B2B', academy:'#B482FF', estate:'#2DD4BF', beauty:'#F060B0' };
+  const counts = {};
+  Object.keys(INDUSTRIES).forEach(k => counts[k] = 0);
+  data.forEach(r => { if (counts[r.industry] !== undefined) counts[r.industry]++; });
+  const max = Math.max(...Object.values(counts), 1);
+  bar.innerHTML = Object.entries(INDUSTRIES).map(([k, v]) =>
+    `<div class="bar-row">
+      <span class="bar-label">${v.label}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${(counts[k]/max*100).toFixed(0)}%;background:${colors[k]}"></div></div>
+      <span class="bar-val">${counts[k]}</span>
+    </div>`
+  ).join('');
+
+  const statusColors = { wait:'#FFD166', done:'#3DD68C', cancel:'#444' };
+  const sc = { wait: data.filter(r=>r.status==='wait').length, done: data.filter(r=>r.status==='done').length, cancel: data.filter(r=>r.status==='cancel').length };
+  const total = data.length || 1;
+  let offset = 0;
+  const rad = 36, circ = 2 * Math.PI * rad;
+  const svg = document.getElementById('donutSvg');
+  svg.innerHTML = `<circle cx="50" cy="50" r="${rad}" fill="none" stroke="#242424" stroke-width="14"/>`;
+  Object.entries(sc).forEach(([k,v]) => {
+    const pct = v / total;
+    const dash = pct * circ, gap = circ - dash;
+    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx','50'); circle.setAttribute('cy','50');
+    circle.setAttribute('r',String(rad)); circle.setAttribute('fill','none');
+    circle.setAttribute('stroke', statusColors[k]); circle.setAttribute('stroke-width','14');
+    circle.setAttribute('stroke-dasharray',`${dash} ${gap}`);
+    circle.setAttribute('stroke-dashoffset', String(-offset * circ));
+    circle.setAttribute('transform','rotate(-90 50 50)');
+    svg.appendChild(circle);
+    offset += pct;
+  });
+  document.getElementById('donutLegend').innerHTML = Object.entries(STATUSES).map(([k,v]) =>
+    `<div class="legend-item">
+      <span class="legend-dot" style="background:${statusColors[k]}"></span>
+      <span class="legend-label">${v.label}</span>
+      <span class="legend-val">${sc[k]}</span>
+    </div>`
+  ).join('');
+}
+
+function refresh() { updateStats(); renderTable(); renderCharts(); }
+
+// ── DRAWER ──
+function openDrawer(id) {
+  const r = data.find(d => d.id === id);
+  if (!r) return;
+  selectedId = id;
+  const ind = INDUSTRIES[r.industry] || { label: r.industry || '기타', cls: '' };
+  const st  = STATUSES[r.status]    || { label: r.status, cls: '' };
+  document.getElementById('d-name').textContent = r.name || '—';
+  document.getElementById('d-phone').textContent = r.phone || '—';
+  document.getElementById('d-email').textContent = r.email || '—';
+  document.getElementById('d-industry').innerHTML = `<span class="badge ${ind.cls}">${ind.label}</span>`;
+  document.getElementById('d-date').textContent = fmtDate(r.createdAt);
+  document.getElementById('d-status').innerHTML = `<span class="status ${st.cls}">${st.label}</span>`;
+  document.getElementById('d-memo').value = r.memo || '';
+  document.getElementById('d-call-btn').onclick = () => callPhone(r.phone);
+  document.getElementById('drawerBg').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+}
+
+function closeDrawer() {
+  if (selectedId) {
+    const memo = document.getElementById('d-memo').value;
+    updateRow(selectedId, { memo });
+  }
+  document.getElementById('drawerBg').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  selectedId = null;
+}
+
+function setStatus(status) {
+  if (!selectedId) return;
+  const memo = document.getElementById('d-memo').value;
+  updateRow(selectedId, { status, memo });
+  closeDrawer();
+}
+
+function quickDone(id) { updateRow(id, { status: 'done' }); }
+
+function callPhone(phone) { if (phone) window.location.href = 'tel:' + phone.replace(/-/g,''); }
+
+function exportCSV() {
+  const rows = [['이름','연락처','이메일','업종','날짜','상태','메모']];
+  data.forEach(r => {
+    const ind = INDUSTRIES[r.industry]?.label || r.industry || '';
+    const st  = STATUSES[r.status]?.label    || r.status   || '';
+    rows.push([r.name||'', r.phone||'', r.email||'', ind, fmtDate(r.createdAt), st, r.memo||'']);
+  });
+  const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = `상담신청_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+}
+
+// 테스트 데이터 추가
+async function addDummy() {
+  const NAMES = ['김지수','이민준','박서연','최현우','정다은','강태양','윤소희','임준혁'];
+  const keys = Object.keys(INDUSTRIES);
+  const name = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const industry = keys[Math.floor(Math.random() * keys.length)];
+  const rnd = n => String(Math.floor(Math.random() * Math.pow(10,n))).padStart(n,'0');
+  const { error } = await db.from(TABLE).insert({
+    name, phone: `010-${rnd(4)}-${rnd(4)}`,
+    email: `test${rnd(3)}@naver.com`,
+    industry, status: 'wait', memo: ''
+  });
+  if (error) alert('추가 실패: ' + error.message);
+}
+
+function switchTab(tab) {
+  const titles = { dashboard:'대시보드', list:'신청 목록', stats:'통계' };
+  document.getElementById('topbar-title').textContent = titles[tab] || tab;
+  document.querySelectorAll('.nav-item').forEach((el,i) => {
+    el.classList.toggle('active', ['dashboard','list','stats'][i] === tab);
+  });
+}
+
+function updateDate() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('topbar-date').textContent =
+    `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+setInterval(updateDate, 1000); updateDate();
+
+// 시작
+loadData();
+</script>
+</body>
+</html>

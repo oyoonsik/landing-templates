@@ -399,99 +399,9 @@ tbody tr:hover .row-actions { opacity: 1; }
   .donut-wrap { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
   .donut-legend { width: 100%; }
 }
-
-/* ── LOGIN OVERLAY ── */
-#loginOverlay {
-  position: fixed; inset: 0; z-index: 9999;
-  background: var(--bg);
-  display: flex; align-items: center; justify-content: center;
-}
-#loginOverlay.hidden { display: none; }
-
-.login-box {
-  width: 100%; max-width: 360px;
-  background: var(--surface);
-  border: 0.5px solid var(--border2);
-  border-radius: 18px;
-  padding: 40px 36px;
-  display: flex; flex-direction: column; gap: 0;
-}
-.login-logo {
-  font-family: var(--mono); font-size: 12px; font-weight: 600;
-  letter-spacing: 0.1em; color: var(--accent);
-  margin-bottom: 6px;
-}
-.login-title {
-  font-size: 22px; font-weight: 700;
-  letter-spacing: -0.02em; margin-bottom: 6px;
-}
-.login-sub {
-  font-size: 12px; color: var(--muted); margin-bottom: 32px;
-}
-.login-label {
-  font-size: 11px; font-weight: 600; color: var(--muted);
-  letter-spacing: 0.06em; text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.login-input {
-  width: 100%; background: var(--surface2);
-  border: 0.5px solid var(--border2);
-  border-radius: 10px; color: var(--text);
-  font-family: var(--sans); font-size: 14px;
-  padding: 12px 16px; outline: none;
-  transition: border-color 0.15s; margin-bottom: 20px;
-}
-.login-input::placeholder { color: var(--muted2); }
-.login-input:focus { border-color: var(--accent-border); }
-.login-input.error { border-color: var(--accent); animation: shake 0.3s ease; }
-.login-btn {
-  width: 100%; padding: 13px;
-  background: var(--accent); color: #fff;
-  border: none; border-radius: 10px;
-  font-family: var(--sans); font-size: 14px; font-weight: 700;
-  cursor: pointer; transition: opacity 0.15s; margin-top: 4px;
-}
-.login-btn:hover { opacity: 0.88; }
-.login-error {
-  font-size: 12px; color: var(--accent);
-  text-align: center; margin-top: 14px;
-  min-height: 18px;
-}
-.login-footer {
-  font-size: 10px; color: var(--muted2);
-  text-align: center; margin-top: 28px;
-  font-family: var(--mono);
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  75% { transform: translateX(6px); }
-}
 </style>
 </head>
 <body>
-
-<!-- LOGIN OVERLAY -->
-<div id="loginOverlay">
-  <div class="login-box">
-    <div class="login-logo">ADMIN PANEL</div>
-    <div class="login-title">관리자 로그인</div>
-    <div class="login-sub">상담 신청 관리 시스템에 접근하려면<br>비밀번호를 입력하세요.</div>
-    <div class="login-label">비밀번호</div>
-    <input
-      type="password"
-      id="loginInput"
-      class="login-input"
-      placeholder="비밀번호 입력"
-      onkeydown="if(event.key==='Enter') doLogin()"
-      autocomplete="current-password"
-    >
-    <button class="login-btn" onclick="doLogin()">로그인</button>
-    <div class="login-error" id="loginError"></div>
-    <div class="login-footer">SESSION · AUTO LOCK ON CLOSE</div>
-  </div>
-</div>
 
 <div class="layout">
 
@@ -516,11 +426,7 @@ tbody tr:hover .row-actions { opacity: 1; }
     </button>
   </nav>
   <div class="sidebar-bottom">
-    <button class="nav-item" onclick="doLogout()" style="color:var(--accent);width:100%">
-      <span class="nav-icon">🔒</span>
-      <span>로그아웃</span>
-    </button>
-    <div class="version-tag" style="margin-top:8px">v1.0.0</div>
+    <div class="version-tag">v1.0.0</div>
   </div>
 </aside>
 
@@ -940,44 +846,8 @@ function updateDate() {
 }
 setInterval(updateDate, 1000); updateDate();
 
-// ── 로그인 ──
-// 비밀번호를 변경하려면 아래 ADMIN_PASSWORD 값을 수정하세요.
-const ADMIN_PASSWORD = 'admin1234';
-const SESSION_KEY = 'admin_auth';
-
-function checkAuth() {
-  if (sessionStorage.getItem(SESSION_KEY) === 'ok') {
-    document.getElementById('loginOverlay').classList.add('hidden');
-    loadData();
-  } else {
-    // 인증 안 됐으면 데이터 로딩 안 함
-    setTimeout(() => document.getElementById('loginInput').focus(), 100);
-  }
-}
-
-function doLogin() {
-  const val = document.getElementById('loginInput').value;
-  const inp = document.getElementById('loginInput');
-  const err = document.getElementById('loginError');
-  if (val === ADMIN_PASSWORD) {
-    sessionStorage.setItem(SESSION_KEY, 'ok');
-    document.getElementById('loginOverlay').classList.add('hidden');
-    loadData();
-  } else {
-    err.textContent = '비밀번호가 올바르지 않습니다.';
-    inp.classList.add('error');
-    inp.value = '';
-    setTimeout(() => { inp.classList.remove('error'); inp.focus(); }, 400);
-  }
-}
-
-function doLogout() {
-  sessionStorage.removeItem(SESSION_KEY);
-  location.reload();
-}
-
 // 시작
-checkAuth();
+loadData();
 </script>
 </body>
 </html>
